@@ -458,6 +458,8 @@ footer{background:var(--white); border-top:1px solid var(--blue3); color:var(--g
   .card,.kpi,.tw,table,.chart,.notice{page-break-inside:avoid; break-inside:avoid}
   .chart svg{min-width:0}
   .src.fold .src-b{display:block}
+  /* rev.23 — a porta de entrada nunca vai ao papel nem a medicao de escala */
+  #gate,#barra-login{display:none !important}
   tr.prhide{display:none !important}
   .prfoot{display:block !important; margin-top:10px; padding-top:6px;
     border-top:1px solid var(--navy); font-size:8.5px; color:#333; line-height:1.45}
@@ -653,9 +655,135 @@ body.prmeasure .prfoot{display:block !important; font-size:8.5px; line-height:1.
   body.mono svg .bandln{stroke:#000 !important; opacity:.55 !important}
   body.mono svg text{fill:#000 !important}
 }
+
+/* =========================================================================
+   rev.23 — PORTA DE ENTRADA (AUTENTICACAO)
+
+   O cockpit deixa de abrir sozinho. Enquanto nao houver sessao valida, a
+   tela de entrada cobre TUDO — cabecalho, abas, faixa de alerta e rodape —
+   e o corpo nasce com a classe .gate-on justamente para que isso valha
+   tambem no instante anterior a execucao do script: se o JavaScript falhar,
+   a porta permanece fechada, que e o modo seguro de falhar.
+
+   Dois niveis depois da porta, e nao um so:
+     · sessao de qualquer conta  -> LEITURA. Corresponde a policy "leitura
+       publica" da base: ver o painel nao altera nada.
+     · sessao @nextstream.com    -> EDICAO. Corresponde a policy "nextstream
+       escreve". Os controles que gravam recebem a classe .so-editor e so
+       existem no DOM visivel quando o corpo tem .pode-editar.
+
+   A classe .so-editor e conveniencia de interface, NAO e o controle de
+   acesso: quem esconde o botao esconde apenas o botao. O que efetivamente
+   impede a gravacao e o RLS no Postgres, que avalia o e-mail dentro do JWT.
+   ========================================================================= */
+#gate{position:fixed; inset:0; z-index:300; display:none;
+  align-items:center; justify-content:center; padding:24px;
+  background:var(--white);
+  background-image:linear-gradient(160deg,var(--blue1) 0%,var(--white) 45%,var(--blue1) 100%)}
+body.gate-on #gate{display:flex}
+body.gate-on{overflow:hidden}
+/* o conteudo do cockpit nao pode ser lido por baixo da porta, nem por
+   leitor de tela, nem por Ctrl+F, enquanto ela estiver fechada */
+body.gate-on > header,body.gate-on > nav,body.gate-on > main,
+body.gate-on > footer,body.gate-on > .alerta,body.gate-on > .mask{display:none !important}
+
+#gate-box{width:100%; max-width:392px; background:var(--white);
+  border:1px solid var(--line); border-top:3px solid var(--navy);
+  border-radius:5px; padding:26px 26px 22px; box-shadow:0 12px 34px rgba(19,35,63,.13)}
+.gt-hd{display:flex; align-items:center; gap:10px; margin-bottom:18px}
+.gt-hd .spacer{flex:1}
+.gt-langs{display:flex; gap:4px}
+.gt-langs button{background:var(--white); border:1px solid var(--blue3); color:var(--navy);
+  border-radius:3px; padding:3px 7px; font-size:10.5px; font-weight:700; cursor:pointer;
+  letter-spacing:.05em; font-family:inherit}
+.gt-langs button.on{background:var(--blue2); border-color:var(--navy); color:var(--navy-d)}
+.gt-t{font-size:16px; font-weight:800; color:var(--navy-d); letter-spacing:-.01em}
+.gt-s{font-size:12px; color:var(--grey); margin:5px 0 18px; line-height:1.45}
+.gt-f{margin-bottom:12px}
+.gt-f label{display:block; font-size:11px; font-weight:700; color:var(--navy-d);
+  text-transform:uppercase; letter-spacing:.04em; margin-bottom:5px}
+.gt-f input{width:100%; font-family:inherit; font-size:13.5px; padding:9px 11px;
+  border:1px solid var(--blue3); border-radius:4px; background:var(--white); color:#1A1A1A}
+.gt-f input:focus{outline:2px solid var(--brand); outline-offset:-1px; border-color:var(--brand)}
+#btn-entrar{width:100%; padding:10px 14px; font-size:13px; margin-top:4px}
+#btn-entrar[disabled]{opacity:.6; cursor:progress}
+#btn-leitura{width:100%; margin-top:8px; padding:8px 14px; font-size:12px}
+/* erro dentro da propria tela, com fio vermelho a esquerda: o operador le a
+   causa onde esta olhando, e nao em uma caixa do navegador que ele fecha no
+   reflexo antes de ler */
+.gt-err{border:1px solid var(--line); border-left:4px solid var(--red);
+  background:#FDF3F2; color:var(--red-t); font-size:12px; line-height:1.45;
+  padding:9px 11px; border-radius:4px; margin-bottom:12px}
+.gt-err[hidden]{display:none}
+.gt-nota{font-size:11px; color:var(--grey); line-height:1.45; margin-top:16px;
+  padding-top:13px; border-top:1px solid var(--line)}
+
+/* ---------- barra de sessao no cabecalho ---------- */
+#barra-login{display:flex; align-items:center; gap:8px}
+body:not(.gate-on) #barra-login[hidden]{display:none}
+#quem{font-size:11.5px; color:var(--navy-d); font-weight:700; max-width:230px;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+#chip-leitura{font-size:10px; font-weight:800; letter-spacing:.04em; text-transform:uppercase;
+  color:var(--amb-t); background:#FCF3E4; border:1px solid var(--amber);
+  border-radius:3px; padding:2px 7px}
+#chip-leitura[hidden]{display:none}
+
+/* ---------- controles que gravam ---------- */
+.so-editor{display:none !important}
+body.pode-editar .so-editor{display:revert !important}
 </style>
 </head>
-<body>
+<!-- rev.23 — a classe nasce no HTML, e nao e posta pelo script: sem ela, uma
+     falha de carregamento do JavaScript entregaria o cockpit aberto. -->
+<body class="gate-on">
+
+<!-- =================== PORTA DE ENTRADA =================== -->
+<div id="gate" role="dialog" aria-modal="true" aria-labelledby="gtTit">
+  <form id="gate-box" autocomplete="on" novalidate>
+    <div class="gt-hd">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 34 24" xmlns="http://www.w3.org/2000/svg">
+          <g fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="butt">
+            <path d="M-4 -4.3H12L22 2H38"/><path d="M-4 2H12L22 8.3H38"/>
+            <path d="M-4 8.3H12L22 14.6H38"/><path d="M-4 14.6H12L22 20.9H38"/>
+            <path d="M-4 20.9H12L22 27.2H38"/>
+          </g>
+        </svg>
+      </span>
+      <span class="brand">NextStream</span>
+      <span class="spacer"></span>
+      <div class="gt-langs">
+        <button type="button" data-glang="pt" class="on">PT</button>
+        <button type="button" data-glang="es">ES</button>
+        <button type="button" data-glang="en">EN</button>
+      </div>
+    </div>
+
+    <div class="gt-t" id="gtTit" data-i="gtTit"></div>
+    <div class="gt-s" data-i="gtSub"></div>
+
+    <div class="gt-err" id="gtErr" role="alert" aria-live="assertive" hidden></div>
+
+    <div class="gt-f">
+      <label for="email" data-i="gtEmailL"></label>
+      <input id="email" type="email" name="email" autocomplete="username"
+             spellcheck="false" data-ph="gtEmailP">
+    </div>
+    <div class="gt-f">
+      <label for="senha" data-i="gtSenhaL"></label>
+      <input id="senha" type="password" name="password" autocomplete="current-password"
+             data-ph="gtSenhaP">
+    </div>
+
+    <button class="btn pri" id="btn-entrar" type="submit" data-i="gtEntrar"></button>
+    <!-- Contingencia: aparece SOMENTE quando a biblioteca de autenticacao nao
+         pode ser carregada. Uma queda de CDN nao pode deixar a estacao sem
+         ver vento e sismo; o que ela perde, nesse modo, e a gravacao. -->
+    <button class="btn" id="btn-leitura" type="button" data-i="gtLeitura" hidden></button>
+
+    <div class="gt-nota" data-i="gtNota"></div>
+  </form>
+</div>
 
 <header>
   <div class="hd-top">
@@ -695,6 +823,15 @@ body.prmeasure .prfoot{display:block !important; font-size:8.5px; line-height:1.
          tentar fazê-lo na carga apenas gera exceção silenciosa. A faixa
          visual e o título piscante NAO dependem deste botão. -->
     <button class="btn" id="btnAlerta" data-i="btnAlerta"></button>
+    <!-- rev.23 — quem esta na estacao, em que modo, e a saida. O e-mail fica
+         visivel porque e ele que o RLS avalia: se o operador nao enxerga com
+         que conta esta gravando, nao tem como entender por que a gravacao
+         foi recusada. -->
+    <div id="barra-login" hidden>
+      <span id="chip-leitura" data-i="gtChipLeitura" hidden></span>
+      <span id="quem"></span>
+      <button class="btn sm" id="btn-sair" data-i="gtSair"></button>
+    </div>
     <div class="clock">
       <div id="clock" class="nm"></div>
       <div id="fetchSt"></div>
@@ -843,7 +980,9 @@ body.prmeasure .prfoot{display:block !important; font-size:8.5px; line-height:1.
       <p data-i="regP"></p>
     </div>
     <div class="bar noprint">
-      <button class="btn pri" id="btnNovoReg" data-i="btnNovoReg"></button>
+      <!-- rev.23 — unico caminho de abertura do modal de gravacao: some para
+           quem esta apenas lendo. -->
+      <button class="btn pri so-editor" id="btnNovoReg" data-i="btnNovoReg"></button>
       <button class="btn sm" id="btnCsvReg" data-i="btnCsv"></button>
       <button class="btn sm" id="btnPptxCor" data-i="btnPptxCor"></button>
       <button class="btn sm" id="btnPptxMono" data-i="btnPptxMono"></button>
@@ -1565,6 +1704,7 @@ const I = {
   thData:"Registrado em", thTipo:"Natureza", thValor:"Valor medido", thFonte:"Fonte oficial",
   thResp:"Responsável", thObs:"Observação",
   emReg:"Nenhum evento registrado nesta estação. Utilize o botão “Registrar evento”.",
+  emRegLeitura:"Nenhum evento registrado. Esta sessão é de leitura: apenas contas @nextstream.com registram eventos.",
   fonT:"Camada 1 — fontes oficiais por país", fonP:"São as fontes que detêm autoridade normativa. Sustentam decisão, registro probatório e comunicação à autoridade pública, à seguradora e ao Board. Prevalecem sempre sobre o agregador em caso de divergência. Catálogo completo das 26 fontes: MATRIZ_FONTES_CLIMA_SISMO_LATAM_rev2.xlsx.",
   thMet:"Meteorologia oficial", thSis:"Sismologia oficial", thPc:"Proteção civil",
   sConc:"Concentração geográfica intra-país — achado da rev.02",
@@ -1651,6 +1791,26 @@ const I = {
   modoCor:"colorido", modoMono:"monocromático",
   complInt:"íntegro", complRefl:"grade refluída para 5 colunas",
   complTruncA:"exibidas", complTruncB:"de", complTruncC:"linhas — completo por exportação CSV",
+
+  /* rev.23 — PORTA DE ENTRADA. Texto íntegro nos três dicionários: recusar
+     uma credencial em idioma que o operador não lê é recusá-la sem dizer
+     por quê. */
+  gtTit:"Acesso ao cockpit",
+  gtSub:"Instrumento interno da Diretoria de Safety &amp; Physical Security. Identifique-se para abrir o painel.",
+  gtEmailL:"E-mail corporativo", gtEmailP:"voce@nextstream.com",
+  gtSenhaL:"Senha", gtSenhaP:"Sua senha",
+  gtEntrar:"Entrar", gtEntrando:"Verificando…", gtSair:"Sair",
+  gtChipLeitura:"Somente leitura",
+  gtNota:"Contas <b>@nextstream.com</b> registram e editam eventos. Demais contas autenticadas veem o painel em modo de leitura. A permissão é verificada na base corporativa, e não neste navegador.",
+  gtLeitura:"Abrir em modo de leitura (sem rede)",
+  gtErrVazio:"Informe e-mail e senha.",
+  gtErrCred:"E-mail ou senha incorretos.",
+  gtErrConf:"Este e-mail ainda não foi confirmado. Procure a administração da base.",
+  gtErrTaxa:"Tentativas em excesso. Aguarde um instante antes de tentar de novo.",
+  gtErrRede:"Sem comunicação com a base corporativa. Verifique a rede da estação.",
+  gtErrLib:"Não foi possível carregar o módulo de autenticação (rede ou CDN). O painel pode ser aberto em modo de leitura.",
+  gtErr:"Não foi possível entrar:",
+  gtSemPerm:"Esta conta não tem permissão para registrar eventos. Use uma conta @nextstream.com.",
  },
  es:{
   hdTitle:"Cockpit de Monitoreo Climático y Sísmico — LATAM",
@@ -1739,6 +1899,7 @@ const I = {
   thData:"Registrado el", thTipo:"Tipo de evento", thValor:"Valor medido", thFonte:"Fuente oficial",
   thResp:"Responsable", thObs:"Observación",
   emReg:"Ningún evento registrado en esta estación de trabajo. Utilice el botón “Registrar evento”.",
+  emRegLeitura:"Ningún evento registrado. Esta sesión es de lectura: solo las cuentas @nextstream.com registran eventos.",
   fonT:"Capa 1 — fuentes oficiales por país", fonP:"Son las fuentes que detentan autoridad normativa. Sustentan decisión, registro probatorio y comunicación a la autoridad pública, a la aseguradora y al Directorio. Prevalecen siempre sobre el agregador en caso de divergencia. Catálogo completo de las 26 fuentes: MATRIZ_FONTES_CLIMA_SISMO_LATAM_rev2.xlsx.",
   thMet:"Meteorología oficial", thSis:"Sismología oficial", thPc:"Protección civil",
   sConc:"Concentración geográfica intra-país — hallazgo de la rev.02",
@@ -1825,6 +1986,24 @@ const I = {
   modoCor:"color", modoMono:"monocromático",
   complInt:"íntegro", complRefl:"cuadrícula reorganizada en 5 columnas",
   complTruncA:"mostradas", complTruncB:"de", complTruncC:"filas — completo por exportación CSV",
+
+  /* rev.23 — PUERTA DE ENTRADA */
+  gtTit:"Acceso al cockpit",
+  gtSub:"Instrumento interno de la Dirección de Safety &amp; Physical Security. Identifíquese para abrir el tablero.",
+  gtEmailL:"Correo corporativo", gtEmailP:"usted@nextstream.com",
+  gtSenhaL:"Contraseña", gtSenhaP:"Su contraseña",
+  gtEntrar:"Entrar", gtEntrando:"Verificando…", gtSair:"Salir",
+  gtChipLeitura:"Solo lectura",
+  gtNota:"Las cuentas <b>@nextstream.com</b> registran y editan eventos. Las demás cuentas autenticadas ven el tablero en modo de lectura. El permiso se verifica en la base corporativa, no en este navegador.",
+  gtLeitura:"Abrir en modo de lectura (sin red)",
+  gtErrVazio:"Indique correo y contraseña.",
+  gtErrCred:"Correo o contraseña incorrectos.",
+  gtErrConf:"Este correo aún no fue confirmado. Consulte a la administración de la base.",
+  gtErrTaxa:"Demasiados intentos. Espere un momento antes de reintentar.",
+  gtErrRede:"Sin comunicación con la base corporativa. Verifique la red de la estación.",
+  gtErrLib:"No fue posible cargar el módulo de autenticación (red o CDN). El tablero puede abrirse en modo de lectura.",
+  gtErr:"No fue posible entrar:",
+  gtSemPerm:"Esta cuenta no tiene permiso para registrar eventos. Use una cuenta @nextstream.com.",
  },
  en:{
   hdTitle:"Weather and Seismic Monitoring Cockpit — LATAM",
@@ -1913,6 +2092,7 @@ const I = {
   thData:"Logged at", thTipo:"Event type", thValor:"Measured value", thFonte:"Official source",
   thResp:"Responsible", thObs:"Remarks",
   emReg:"No event logged on this workstation. Use the “Log an event” button.",
+  emRegLeitura:"No event logged. This session is read-only: only @nextstream.com accounts may log events.",
   fonT:"Layer 1 — official sources by country", fonP:"These are the sources holding normative authority. They ground decisions, evidentiary records and communication to public authorities, insurers and the Board. They always prevail over the aggregator in case of divergence. Full catalog of all 26 sources: MATRIZ_FONTES_CLIMA_SISMO_LATAM_rev2.xlsx.",
   thMet:"Official meteorology", thSis:"Official seismology", thPc:"Civil protection",
   sConc:"Intra-country geographic concentration — rev.02 finding",
@@ -1999,6 +2179,24 @@ const I = {
   modoCor:"color", modoMono:"monochrome",
   complInt:"complete", complRefl:"grid reflowed to 5 columns",
   complTruncA:"showing", complTruncB:"of", complTruncC:"rows — full set via CSV export",
+
+  /* rev.23 — SIGN-IN GATE */
+  gtTit:"Cockpit access",
+  gtSub:"Internal instrument of the Safety &amp; Physical Security Directorate. Sign in to open the panel.",
+  gtEmailL:"Corporate e-mail", gtEmailP:"you@nextstream.com",
+  gtSenhaL:"Password", gtSenhaP:"Your password",
+  gtEntrar:"Sign in", gtEntrando:"Checking…", gtSair:"Sign out",
+  gtChipLeitura:"Read only",
+  gtNota:"<b>@nextstream.com</b> accounts log and edit events. Any other authenticated account sees the panel in read-only mode. The permission is enforced in the corporate database, not in this browser.",
+  gtLeitura:"Open in read-only mode (offline)",
+  gtErrVazio:"Enter e-mail and password.",
+  gtErrCred:"Wrong e-mail or password.",
+  gtErrConf:"This e-mail has not been confirmed yet. Contact the database administration.",
+  gtErrTaxa:"Too many attempts. Wait a moment before trying again.",
+  gtErrRede:"No link to the corporate database. Check the station network.",
+  gtErrLib:"The authentication module could not be loaded (network or CDN). The panel can be opened in read-only mode.",
+  gtErr:"Could not sign in:",
+  gtSemPerm:"This account may not log events. Use an @nextstream.com account.",
  }
 };
 
@@ -2432,14 +2630,33 @@ const SB_TAB = "registros";
 
 let SB = null, SB_BOOT = null, sbOk = false, sbPend = 0;
 
+/* rev.23 — estado da sessao. Declarado aqui, junto do cliente, porque
+   salvarReg() o consulta antes de reter qualquer evento. */
+let USUARIO = null, PODE_EDITAR = false, SEM_AUTH = false;
+
 /* Carregamento sob demanda: o cockpit nao pode deixar de abrir porque a CDN
    da biblioteca esta fora do ar. Falha aqui degrada para gravacao local. */
+/* rev.23 — a sessao NAO sobrevive ao recarregamento: fechar ou recarregar a
+   aba derruba o acesso e a porta volta a pedir a senha. E o comportamento
+   pedido para uma estacao de turno, onde o navegador fica aberto e quem
+   senta nele muda. Para manter a sessao entre recargas — util em maquina de
+   uso individual — basta trocar esta constante para true; nada mais no
+   codigo depende dela. */
+const SESSAO_PERSISTENTE = false;
+
 function sbCliente(){
   if(SB_BOOT) return SB_BOOT;
   SB_BOOT = (async ()=>{
     if(!SB_URL || !SB_KEY) return null;
     const m = await import("https://esm.sh/@supabase/supabase-js@2");
-    return m.createClient(SB_URL, SB_KEY, {auth:{persistSession:false}});
+    /* O MESMO cliente le, grava e autentica: e o que garante que o token da
+       sessao acompanhe cada insert e que o RLS possa avaliar o e-mail. Dois
+       clientes distintos gravariam como anonimo e seriam recusados. */
+    return m.createClient(SB_URL, SB_KEY, {auth:{
+      persistSession: SESSAO_PERSISTENTE,
+      autoRefreshToken: true,
+      detectSessionInUrl: false
+    }});
   })().then(c=>(SB=c)).catch(()=>null);
   return SB_BOOT;
 }
@@ -2545,6 +2762,11 @@ async function carregarRegs(){
    evento ja esta retido. Lanca excecao apenas quando NENHUM dos dois aceitou
    o registro — perder um evento ambar em silencio seria a pior falha possivel. */
 async function salvarReg(reg){
+  /* rev.23 — segunda barreira, do lado da estacao. A primeira e o RLS, que e
+     a que vale; esta existe para que a recusa chegue ao operador ANTES de o
+     evento ser retido localmente e entrar numa fila que jamais subiria. */
+  if(!PODE_EDITAR){ const e = new Error("sem permissao"); e.semPermissao = true; throw e; }
+
   reg.uid  = novoUid();
   reg.sync = false;
 
@@ -3166,7 +3388,12 @@ function renderLimiares(){
 
 function renderRegs(){
   const t = document.getElementById("tbReg"), em = document.getElementById("emReg");
-  if(!REGS.length){ t.parentElement.style.display="none"; em.style.display="block"; return; }
+  /* rev.23 — mandar usar um botao que a sessao nao enxerga so faria o
+     operador procurar na tela o que nao esta la. */
+  if(!REGS.length){
+    em.innerHTML = PODE_EDITAR ? T().emReg : T().emRegLeitura;
+    t.parentElement.style.display="none"; em.style.display="block"; return;
+  }
   t.parentElement.style.display=""; em.style.display="none";
   t.innerHTML = `<thead><tr><th>${esc(T().thData)}</th><th>${esc(T().thSite)}</th><th>${esc(T().thTipo)}</th>
     <th>${esc(T().thNivel)}</th><th>${esc(T().thValor)}</th><th>${esc(T().thFonte)}</th>
@@ -3867,6 +4094,11 @@ document.getElementById("btnNovoReg").onclick = ()=>{
   document.getElementById("mSiteSel").innerHTML =
     SITES.map(s=>`<option value="${esc(s.cod)}">${esc(s.cod)} — ${esc(s.loc)}</option>`).join("");
   ["mValor","mFonte","mResp","mObs"].forEach(id=>document.getElementById(id).value="");
+  /* rev.23 — o responsavel ja vem preenchido com a conta da sessao: e ela que
+     assinou o registro na base, e divergir dela no campo de texto so criaria
+     duas versoes do mesmo fato. Continua editavel — quem lavra pode estar
+     lavrando por outro. */
+  if(USUARIO && USUARIO.email) document.getElementById("mResp").value = USUARIO.email;
   mask.classList.add("on");
 };
 const fechar = ()=>mask.classList.remove("on");
@@ -3884,7 +4116,10 @@ document.getElementById("mSave").onclick = async ()=>{
     obs:document.getElementById("mObs").value.trim()||"—"};
   /* rev.22 — o modal so fecha se o evento foi aceito em algum lugar. */
   try{ await salvarReg(reg); }
-  catch(e){ dbOk=false; setDb(); alert(T().regErr); return; }
+  catch(e){
+    if(e && e.semPermissao){ alert(T().gtSemPerm); return; }
+    dbOk=false; setDb(); alert(T().regErr); return;
+  }
   await carregarRegs(); renderRegs(); fechar();
 };
 
@@ -4110,7 +4345,10 @@ function renderAlerta(){
       + '</div>'
       + '<div class="al-btns">'
         + '<button class="btn sm" data-alrec="' + esc(g.nv) + '">' + esc(T().alRec) + '</button>'
-        + '<button class="btn sm" data-alreg="' + esc(g.cods[0]) + '" data-alnv="' + esc(g.nv)
+        /* rev.23 — "registrar" abre o modal de gravacao: classe .so-editor,
+           como o botao da aba Registro. Reconhecer NAO grava na base (apenas
+           silencia o som nesta estacao) e permanece disponivel na leitura. */
+        + '<button class="btn sm so-editor" data-alreg="' + esc(g.cods[0]) + '" data-alnv="' + esc(g.nv)
           + '">' + esc(T().alReg) + '</button>'
       + '</div></div>';
   }).join("");
@@ -4168,9 +4406,179 @@ function armarAlerta(){
 }
 liga("btnAlerta", armarAlerta);
 
+/* =========================================================================
+   rev.23  11B · PORTA DE ENTRADA
+
+   O que esta camada faz e o que NAO faz:
+
+   FAZ  · exige uma sessao antes de mostrar o cockpit;
+        · distingue leitura de edicao pelo dominio do e-mail;
+        · esconde os controles de gravacao de quem so pode ler;
+        · diz, na propria tela, por que uma credencial foi recusada.
+
+   NAO FAZ · nao protege o dado. Um navegador e um ambiente onde tudo que
+     chega pode ser lido e alterado; qualquer verificacao feita aqui pode ser
+     contornada pelo console em segundos. Quem impede a gravacao indevida e o
+     RLS da base, que avalia (auth.jwt() ->> 'email') no servidor. Esta tela e
+     a face visivel daquela regra — jamais a regra.
+
+   A chave publicavel embutida no cockpit tambem nao e segredo: ela apenas
+   identifica o projeto. O que ela permite esta escrito nas policies.
+   ========================================================================= */
+const PERMITIDO = e => !!e && e.toLowerCase().endsWith("@nextstream.com");
+
+const gtEl = id => document.getElementById(id);
+
+function gateErro(msg){
+  const el = gtEl("gtErr");
+  if(!el) return;
+  if(!msg){ el.hidden = true; el.innerHTML = ""; return; }
+  el.hidden = false; el.innerHTML = msg;
+}
+
+/* Traducao da recusa. A mensagem crua do servico vem sempre em ingles e em
+   vocabulario de API; o operador precisa de uma frase que diga o que fazer.
+   O texto original so aparece quando nao houver correspondencia — melhor um
+   ingles obscuro do que um "erro desconhecido" que nao ajuda ninguem. */
+function gateTraduzErro(err){
+  const m = String(err && (err.message || err) || "").toLowerCase();
+  if(/invalid login|invalid credentials|bad_credential/.test(m)) return T().gtErrCred;
+  if(/email not confirmed|not_confirmed/.test(m))                return T().gtErrConf;
+  if(/rate limit|too many/.test(m))                              return T().gtErrTaxa;
+  if(/failed to fetch|network|load failed|timeout/.test(m))      return T().gtErrRede;
+  return T().gtErr + " " + esc(err && err.message ? err.message : String(err));
+}
+
+/* Os rotulos da porta seguem o idioma como o resto do painel. aplicarI18n()
+   ja cuida de [data-i]; aqui ficam os placeholders, que sao atributo e nao
+   conteudo, e o realce do idioma corrente nos dois grupos de botoes. */
+function gateI18n(){
+  document.querySelectorAll("#gate [data-ph]").forEach(el=>{
+    const v = T()[el.dataset.ph];
+    if(typeof v === "string") el.placeholder = v;
+  });
+  document.querySelectorAll("#gate [data-i]").forEach(el=>{
+    const v = T()[el.dataset.i];
+    if(typeof v === "string") el.innerHTML = v;
+  });
+  document.querySelectorAll("[data-glang]").forEach(b=>b.classList.toggle("on", b.dataset.glang === LANG));
+  document.querySelectorAll(".langs button").forEach(b=>b.classList.toggle("on", b.dataset.lang === LANG));
+}
+
+/* Um unico ponto decide tudo que depende da sessao. Chamado na carga, a cada
+   troca de estado da autenticacao e depois de entrar ou sair — nunca ha dois
+   lugares discordando sobre quem esta na estacao. */
+function atualizarEstado(){
+  PODE_EDITAR = PERMITIDO(USUARIO && USUARIO.email);
+  const liberado = !!USUARIO || SEM_AUTH;
+
+  document.body.classList.toggle("gate-on", !liberado);
+  document.body.classList.toggle("pode-editar", PODE_EDITAR);
+
+  const barra = gtEl("barra-login");
+  if(barra) barra.hidden = !USUARIO;
+  const quem = gtEl("quem");
+  if(quem) quem.textContent = USUARIO ? USUARIO.email : "";
+  const chip = gtEl("chip-leitura");
+  if(chip) chip.hidden = !(USUARIO && !PODE_EDITAR);
+
+  /* A aba Registro e a faixa de alerta trazem botoes .so-editor gerados por
+     script: repinta-las mantem a interface coerente com a sessao. */
+  if(typeof renderAlerta === "function") renderAlerta();
+  if(typeof renderRegs === "function" && typeof REGS !== "undefined") renderRegs();
+}
+
+async function entrar(ev){
+  if(ev && ev.preventDefault) ev.preventDefault();
+  const email = (gtEl("email").value || "").trim();
+  const senha = gtEl("senha").value || "";
+  gateErro("");
+  if(!email || !senha) return gateErro(esc(T().gtErrVazio));
+
+  const cli = await sbCliente();
+  if(!cli){ gtEl("btn-leitura").hidden = false; return gateErro(esc(T().gtErrLib)); }
+
+  const bt = gtEl("btn-entrar");
+  bt.disabled = true; bt.textContent = T().gtEntrando;
+  try{
+    const {data, error} = await cli.auth.signInWithPassword({email, password:senha});
+    if(error) return gateErro(gateTraduzErro(error));
+    USUARIO = (data && data.user) || null;
+    gtEl("senha").value = "";
+    atualizarEstado();
+    /* Entrou: o que ficou retido nesta estacao enquanto ninguem estava
+       autenticado sobe agora, e a aba passa a mostrar a base inteira. */
+    try{ await carregarRegs(); renderRegs(); }catch(e){}
+  }catch(e){
+    gateErro(gateTraduzErro(e));
+  }finally{
+    bt.disabled = false; bt.textContent = T().gtEntrar;
+  }
+}
+
+async function sair(){
+  try{ const cli = await sbCliente(); if(cli) await cli.auth.signOut(); }catch(e){}
+  USUARIO = null; SEM_AUTH = false;
+  const s = gtEl("senha"); if(s) s.value = "";
+  gateErro("");
+  atualizarEstado();
+}
+
+async function iniciarAuth(){
+  const cli = await sbCliente();
+
+  if(!cli){
+    /* Sem biblioteca nao ha como autenticar. A porta permanece fechada, mas
+       com a saida de contingencia a vista: o cockpit continua util sem a
+       base — vento e sismo vem dos provedores, nao dela. */
+    gtEl("btn-leitura").hidden = false;
+    gateErro(esc(T().gtErrLib));
+    atualizarEstado();
+    return;
+  }
+
+  try{
+    const {data} = await cli.auth.getSession();
+    USUARIO = (data && data.session && data.session.user) || null;
+  }catch(e){ USUARIO = null; }
+
+  /* Expiracao de token, saida em outra aba, renovacao: o estado da porta
+     acompanha o da sessao sem que ninguem precise recarregar. */
+  cli.auth.onAuthStateChange((_ev, sess)=>{
+    USUARIO = (sess && sess.user) || null;
+    atualizarEstado();
+  });
+
+  atualizarEstado();
+}
+
+/* --- ligacoes da porta --- */
+gtEl("gate-box").addEventListener("submit", entrar);
+liga("btn-sair", sair);
+liga("btn-leitura", ()=>{
+  SEM_AUTH = true;          /* leitura sem sessao: PODE_EDITAR segue falso */
+  atualizarEstado();
+});
+document.querySelectorAll("[data-glang]").forEach(b=>{
+  b.onclick = ()=>{
+    LANG = b.dataset.glang;
+    render(); setDb(); tick(); gateI18n();
+  };
+});
+/* Os botoes PT/ES/EN do cabecalho ja tem tratador proprio; este ouvinte
+   apenas mantem a porta no mesmo idioma, sem tocar naquele codigo. */
+document.addEventListener("click", e=>{
+  if(e.target.closest(".langs button")) gateI18n();
+});
+
 /* ---------------------------------------------- 12. INICIALIZACAO */
 (async function init(){
   render();
+  gateI18n();
+  /* A porta e resolvida ANTES de qualquer outra coisa. O restante da carga
+     prossegue por tras dela: quando o operador entra, o painel ja esta
+     pronto, em vez de comecar a coletar naquele instante. */
+  await iniciarAuth();
   await carregarRegs(); renderRegs();
   /* rev.10 — cadencia de um segundo: alimenta relogio e contagem regressiva.
      Custo desprezivel, apenas dois nos de texto atualizados. */
