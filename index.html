@@ -1560,7 +1560,7 @@ const I = {
        ["ambar","SOC","Gerente de Operações do Data Center","15 minutos","Log de evento com nível e fonte"],
        ["vermelho","Coordenação de Site","Diretoria de Safety & Security · Gerência de Operações","30 minutos","Log de evento e relatório de ocorrência"],
        ["critico","Diretoria de Safety & Security","Board · Diretoria Regional · Seguradora, se houver dano","Imediata","Relatório de ocorrência e dossiê de evidência"]],
-  regT:"Registro de eventos", regP:"Todo evento de nível âmbar ou superior deve ser registrado com instante, site, valor medido, fonte oficial consultada, nível atribuído, ação executada e responsável identificado. Retenção mínima de cinco anos. Os registros deste painel residem no navegador desta estação (IndexedDB) e devem ser exportados para o repositório corporativo.",
+  regT:"Registro de eventos", regP:"Todo evento de nível âmbar ou superior deve ser registrado com instante, site, valor medido, fonte oficial consultada, nível atribuído, ação executada e responsável identificado. Retenção mínima de cinco anos. Os registros deste painel são gravados na base corporativa e ficam visíveis em todas as estações. Sem rede, o evento é retido nesta estação e sobe automaticamente quando a conexão retorna — a marca ⟳ indica o que ainda não foi confirmado na base.",
   btnNovoReg:"Registrar evento",
   thData:"Registrado em", thTipo:"Natureza", thValor:"Valor medido", thFonte:"Fonte oficial",
   thResp:"Responsável", thObs:"Observação",
@@ -1588,6 +1588,11 @@ const I = {
   colSusp:"Ciclo suspenso — aba oculta", colEmCurso:"Coleta em andamento", semCol:"sem coleta concluída",
   pfUlt:"Última coleta", pfPer:"Periodicidade", perVal:"30 min (cláusula 7.4)",
   dbOk:"IndexedDB disponível", dbEr:"IndexedDB indisponível nesta estação",
+  sbOk:"Base corporativa conectada", sbPend:"Base conectada · {n} registro(s) subindo",
+  sbOff:"Base indisponível — gravando nesta estação", sbFila:"{n} na fila",
+  sbEr:"Sem base e sem armazenamento local — não registre por aqui",
+  sbFilaTit:"Ainda não confirmado na base corporativa",
+  regErr:"Não foi possível registrar o evento: a base corporativa não respondeu e esta estação não tem armazenamento local disponível. Registre por outro meio.",
   reqFonte:"Em nível âmbar ou superior, a fonte oficial consultada é campo obrigatório.",
   pfTit:"NextStream · Diretoria de Safety & Physical Security · Cockpit rev.21",
   pfPain:"Painel impresso", pfEm:"Impresso em", pfIdio:"Idioma", pfEnd:"Endpoints",
@@ -1729,7 +1734,7 @@ const I = {
        ["ambar","SOC","Gerente de Operaciones del Data Center","15 minutos","Bitácora de eventos con nivel y fuente"],
        ["vermelho","Operaciones de Sitio","Dirección de Safety & Security · Gerencia de Operaciones","30 minutos","Bitácora de eventos e informe de incidente"],
        ["critico","Dirección de Safety & Security","Directorio · Dirección Regional · Aseguradora, si hay daño","Inmediata","Informe de incidente y expediente de evidencia"]],
-  regT:"Registro de eventos", regP:"Todo evento de nivel ámbar o superior debe registrarse con instante, sitio, valor medido, fuente oficial consultada, nivel atribuido, acción ejecutada y responsable identificado. Retención mínima de cinco años. Los registros de este tablero residen en el navegador de esta estación de trabajo (IndexedDB) y deben exportarse al repositorio corporativo.",
+  regT:"Registro de eventos", regP:"Todo evento de nivel ámbar o superior debe registrarse con instante, sitio, valor medido, fuente oficial consultada, nivel atribuido, acción ejecutada y responsable identificado. Retención mínima de cinco años. Los registros de este tablero se guardan en la base corporativa y son visibles en todas las estaciones. Sin red, el evento queda retenido en esta estación y sube automáticamente al volver la conexión — la marca ⟳ indica lo que aún no fue confirmado en la base.",
   btnNovoReg:"Registrar evento",
   thData:"Registrado el", thTipo:"Tipo de evento", thValor:"Valor medido", thFonte:"Fuente oficial",
   thResp:"Responsable", thObs:"Observación",
@@ -1757,6 +1762,11 @@ const I = {
   colSusp:"Ciclo suspendido — pestaña oculta", colEmCurso:"Actualización en curso", semCol:"sin actualización concluida",
   pfUlt:"Última actualización", pfPer:"Periodicidad", perVal:"30 min (cláusula 7.4)",
   dbOk:"IndexedDB disponible", dbEr:"IndexedDB no disponible en esta estación de trabajo",
+  sbOk:"Base corporativa conectada", sbPend:"Base conectada · {n} registro(s) subiendo",
+  sbOff:"Base no disponible — guardando en esta estación", sbFila:"{n} en cola",
+  sbEr:"Sin base y sin almacenamiento local — no registre por aquí",
+  sbFilaTit:"Aún no confirmado en la base corporativa",
+  regErr:"No fue posible registrar el evento: la base corporativa no respondió y esta estación no tiene almacenamiento local disponible. Registre por otro medio.",
   reqFonte:"En nivel ámbar o superior, la fuente oficial consultada es campo obligatorio.",
   pfTit:"NextStream · Dirección de Safety & Physical Security · Cockpit rev.21",
   pfPain:"Tablero impreso", pfEm:"Impreso el", pfIdio:"Idioma", pfEnd:"Endpoints",
@@ -1898,7 +1908,7 @@ const I = {
        ["ambar","SOC","Data Center Operations Manager","15 minutes","Event log with level and source"],
        ["vermelho","Site Operations","Safety & Security Directorate · Operations Leadership","30 minutes","Event log and incident report"],
        ["critico","Safety & Security Directorate","Board · Regional Directorate · Insurer, if damage occurred","Immediate","Incident report and evidence file"]],
-  regT:"Event log", regP:"Every event at amber level or above must be logged with timestamp, site, measured value, official source consulted, level assigned, action taken and the person accountable. Retain for a minimum of five years. Records in this dashboard reside in this workstation's browser (IndexedDB) and must be exported to the corporate repository.",
+  regT:"Event log", regP:"Every event at amber level or above must be logged with timestamp, site, measured value, official source consulted, level assigned, action taken and the person accountable. Retain for a minimum of five years. Records in this dashboard are written to the corporate database and are visible from every workstation. With no network, the event is held on this workstation and uploads automatically once the connection returns — the ⟳ mark shows what is not yet confirmed in the database.",
   btnNovoReg:"Log an event",
   thData:"Logged at", thTipo:"Event type", thValor:"Measured value", thFonte:"Official source",
   thResp:"Responsible", thObs:"Remarks",
@@ -1926,6 +1936,11 @@ const I = {
   colSusp:"Cycle paused — tab hidden", colEmCurso:"Update running", semCol:"no completed update",
   pfUlt:"Last update", pfPer:"Refresh interval", perVal:"30 min (clause 7.4)",
   dbOk:"IndexedDB available", dbEr:"IndexedDB unavailable on this workstation",
+  sbOk:"Corporate database connected", sbPend:"Database connected · {n} record(s) uploading",
+  sbOff:"Database unavailable — saving on this workstation", sbFila:"{n} queued",
+  sbEr:"No database and no local storage — do not log here",
+  sbFilaTit:"Not yet confirmed in the corporate database",
+  regErr:"The event could not be logged: the corporate database did not respond and this workstation has no local storage available. Log it by other means.",
   reqFonte:"At amber level or above, the official source consulted is a mandatory field.",
   pfTit:"NextStream · Safety & Physical Security Directorate · Cockpit rev.21",
   pfPain:"Panel printed", pfEm:"Printed on", pfIdio:"Language", pfEnd:"Endpoints",
@@ -2399,24 +2414,156 @@ function abrirDb(){
     rq.onerror = ()=>rej(rq.error);
   });
 }
-async function carregarRegs(){
-  try{
-    const db = await abrirDb();
-    REGS = await new Promise((res,rej)=>{
-      const rq = db.transaction("registros","readonly").objectStore("registros").getAll();
-      rq.onsuccess=()=>res(rq.result||[]); rq.onerror=()=>rej(rq.error);
-    });
-    REGS.sort((a,b)=>new Date(b.ts)-new Date(a.ts));
-    dbOk = true;
-  }catch(e){ dbOk=false; REGS=[]; }
-  setDb();
+/* ------------------------------------------- 7b. BASE CORPORATIVA (SUPABASE)
+   rev.22 — o Registro de eventos deixa de residir apenas no navegador desta
+   estacao e passa a gravar em base compartilhada (Supabase). O evento lancado
+   em Sao Paulo aparece na estacao de Santiago, e a retencao nao depende mais
+   de ninguem lembrar de exportar antes de limpar o navegador.
+
+   O IndexedDB NAO foi removido: continua sendo a contingencia. Sem rede o
+   evento e gravado localmente e sobe sozinho na proxima carga bem sucedida,
+   e a base lida e espelhada em disco para que a aba abra mesmo offline.
+
+   Apenas a aba Registro usa a base. A memoria sismica (clausula 11.3.5)
+   permanece local, como antes: e cache de consulta, nao registro auditavel. */
+const SB_URL = "https://prqqtwtawqkouwiassux.supabase.co";
+const SB_KEY = "sb_publishable_5RNG-NHMJT3WskVoMrFmbg_cLPup-CQ";
+const SB_TAB = "registros";
+
+let SB = null, SB_BOOT = null, sbOk = false, sbPend = 0;
+
+/* Carregamento sob demanda: o cockpit nao pode deixar de abrir porque a CDN
+   da biblioteca esta fora do ar. Falha aqui degrada para gravacao local. */
+function sbCliente(){
+  if(SB_BOOT) return SB_BOOT;
+  SB_BOOT = (async ()=>{
+    if(!SB_URL || !SB_KEY) return null;
+    const m = await import("https://esm.sh/@supabase/supabase-js@2");
+    return m.createClient(SB_URL, SB_KEY, {auth:{persistSession:false}});
+  })().then(c=>(SB=c)).catch(()=>null);
+  return SB_BOOT;
 }
-async function salvarReg(reg){
+
+/* Identificador gerado na estacao, e nao pela base: e ele que permite subir
+   um registro feito offline sem duplicar quando a conexao volta. */
+function novoUid(){
+  try{ if(window.crypto && crypto.randomUUID) return crypto.randomUUID(); }catch(e){}
+  return "r" + Date.now().toString(36) + Math.random().toString(36).slice(2,10);
+}
+
+const paraBase = r => ({uid:r.uid, ts:r.ts, site:r.site, tipo:r.tipo, nivel:r.nivel,
+                        valor:r.valor, fonte:r.fonte, resp:r.resp, obs:r.obs});
+const daBase   = r => ({uid:r.uid, ts:r.ts, site:r.site, tipo:r.tipo, nivel:r.nivel,
+                        valor:r.valor, fonte:r.fonte, resp:r.resp, obs:r.obs, sync:true});
+
+async function locTodos(){
+  const db = await abrirDb();
+  return await new Promise((res,rej)=>{
+    const rq = db.transaction("registros","readonly").objectStore("registros").getAll();
+    rq.onsuccess=()=>res(rq.result||[]); rq.onerror=()=>rej(rq.error);
+  });
+}
+async function locGravar(reg){
   const db = await abrirDb();
   await new Promise((res,rej)=>{
-    const rq = db.transaction("registros","readwrite").objectStore("registros").add(reg);
-    rq.onsuccess=()=>res(); rq.onerror=()=>rej(rq.error);
+    const st = db.transaction("registros","readwrite").objectStore("registros");
+    const rq = reg.id ? st.put(reg) : st.add(reg);
+    rq.onsuccess = e=>{ if(!reg.id) reg.id = e.target.result; res(); };
+    rq.onerror   = ()=>rej(rq.error);
   });
+}
+
+/* 23505 = chave duplicada. Significa que o registro JA esta na base: a
+   insercao anterior chegou e so a resposta se perdeu. Nao e erro. */
+const jaNaBase = err => err && (err.code === "23505" || /duplicate key/i.test(err.message||""));
+
+async function subirPendentes(cli, locais){
+  for(const r of locais.filter(x=>!x.sync)){
+    try{
+      const {error} = await cli.from(SB_TAB).insert(paraBase(r));
+      if(error && !jaNaBase(error)) continue;
+      r.sync = true;
+      try{ await locGravar(r); }catch(e){}
+    }catch(e){ /* permanece na fila */ }
+  }
+}
+
+/* Espelho local da base: garante leitura da aba sem rede. */
+async function espelhar(remotos, locais){
+  const porUid = new Map(locais.filter(r=>r.uid).map(r=>[r.uid, r]));
+  for(const r of remotos){
+    const l = porUid.get(r.uid);
+    try{
+      if(!l) await locGravar(daBase(r));
+      else if(!l.sync){ l.sync = true; await locGravar(l); }
+    }catch(e){ /* espelho e conveniencia, nao bloqueia a leitura */ }
+  }
+}
+
+async function carregarRegs(){
+  let locais = [];
+  try{ locais = await locTodos(); dbOk = true; }
+  catch(e){ dbOk = false; }
+
+  /* Registros anteriores a rev.22 nao tem identificador proprio: recebem um
+     e entram na fila, de modo que o historico da estacao suba para a base. */
+  for(const r of locais){
+    if(!r.uid){ r.uid = novoUid(); r.sync = false; try{ await locGravar(r); }catch(e){} }
+  }
+
+  const cli = await sbCliente();
+  let remotos = null;
+
+  if(cli){
+    await subirPendentes(cli, locais);
+    try{
+      const {data,error} = await cli.from(SB_TAB)
+        .select("uid,ts,site,tipo,nivel,valor,fonte,resp,obs")
+        .order("ts",{ascending:false}).limit(5000);
+      if(error) throw error;
+      remotos = data || [];
+    }catch(e){ remotos = null; }
+  }
+
+  if(remotos){
+    sbOk = true;
+    const mapa = new Map(remotos.map(r=>[r.uid, daBase(r)]));
+    locais.filter(r=>!r.sync).forEach(r=>{ if(!mapa.has(r.uid)) mapa.set(r.uid, r); });
+    REGS = [...mapa.values()];
+    if(dbOk) await espelhar(remotos, locais);
+  }else{
+    sbOk = false;
+    REGS = locais;
+  }
+
+  REGS.sort((a,b)=>new Date(b.ts)-new Date(a.ts));
+  sbPend = REGS.filter(r=>r.sync===false).length;
+  setDb();
+}
+
+/* Grava primeiro na estacao e so depois na base: se a rede cair no meio, o
+   evento ja esta retido. Lanca excecao apenas quando NENHUM dos dois aceitou
+   o registro — perder um evento ambar em silencio seria a pior falha possivel. */
+async function salvarReg(reg){
+  reg.uid  = novoUid();
+  reg.sync = false;
+
+  let erroLocal = null;
+  try{ await locGravar(reg); }
+  catch(e){ erroLocal = e; dbOk = false; }
+
+  const cli = await sbCliente();
+  if(cli){
+    try{
+      const {error} = await cli.from(SB_TAB).insert(paraBase(reg));
+      if(error && !jaNaBase(error)) throw error;
+      reg.sync = true; sbOk = true;
+      if(!erroLocal){ try{ await locGravar(reg); }catch(e){} }
+      return;
+    }catch(e){ sbOk = false; }
+  }
+
+  if(erroLocal) throw erroLocal;
 }
 /* -------------------------------------------------- MEMORIA SISMICA LOCAL
    Retencao de 30 dias corridos, deduplicada pela chave identificador+site.
@@ -2466,8 +2613,15 @@ async function purgarSismos(){
 function setDb(){
   const d=document.getElementById("dotDb");
   if(!d) return;
-  d.className = "dot "+(dbOk?"ok":"er");
-  document.getElementById("txtDb").textContent = dbOk?T().dbOk:T().dbEr;
+  /* rev.22 — o indicador deixa de falar do armazenamento do navegador e passa
+     a dizer o que interessa ao operador: o evento esta na base ou ainda nao. */
+  let cls, txt;
+  if(sbOk && !sbPend)      { cls="ok"; txt=T().sbOk; }
+  else if(sbOk)            { cls="wk"; txt=T().sbPend.replace("{n}", sbPend); }
+  else if(dbOk)            { cls="wk"; txt=T().sbOff + (sbPend ? " · " + T().sbFila.replace("{n}", sbPend) : ""); }
+  else                     { cls="er"; txt=T().sbEr; }
+  d.className = "dot "+cls;
+  document.getElementById("txtDb").textContent = txt;
 }
 
 /* =========================================================================
@@ -3017,7 +3171,8 @@ function renderRegs(){
   t.innerHTML = `<thead><tr><th>${esc(T().thData)}</th><th>${esc(T().thSite)}</th><th>${esc(T().thTipo)}</th>
     <th>${esc(T().thNivel)}</th><th>${esc(T().thValor)}</th><th>${esc(T().thFonte)}</th>
     <th>${esc(T().thResp)}</th><th>${esc(T().thObs)}</th></tr></thead><tbody>` +
-    REGS.map(r=>`<tr><td class="nm">${new Date(r.ts).toLocaleString(LOC[LANG])}</td>
+    REGS.map(r=>`<tr><td class="nm">${new Date(r.ts).toLocaleString(LOC[LANG])}${
+      r.sync===false ? ` <b title="${esc(T().sbFilaTit)}" style="color:var(--amber)">⟳</b>` : ""}</td>
       <td><b>${esc(r.site)}</b></td><td>${esc(T().tipos[r.tipo]||r.tipo)}</td><td>${chip(r.nivel)}</td>
       <td class="nm">${esc(r.valor)}</td><td>${esc(r.fonte)}</td><td>${esc(r.resp)}</td>
       <td>${esc(r.obs)}</td></tr>`).join("") + "</tbody>";
@@ -3727,7 +3882,9 @@ document.getElementById("mSave").onclick = async ()=>{
     valor:document.getElementById("mValor").value.trim()||"—", fonte:fonte||"—",
     resp:document.getElementById("mResp").value.trim()||"—",
     obs:document.getElementById("mObs").value.trim()||"—"};
-  try{ await salvarReg(reg); }catch(e){ dbOk=false; setDb(); }
+  /* rev.22 — o modal so fecha se o evento foi aceito em algum lugar. */
+  try{ await salvarReg(reg); }
+  catch(e){ dbOk=false; setDb(); alert(T().regErr); return; }
   await carregarRegs(); renderRegs(); fechar();
 };
 
