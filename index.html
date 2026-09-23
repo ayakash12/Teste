@@ -731,11 +731,384 @@ body:not(.gate-on) #barra-login[hidden]{display:none}
 /* ---------- controles que gravam ---------- */
 .so-editor{display:none !important}
 body.pode-editar .so-editor{display:revert !important}
+
+/* =========================================================================
+   rev.24 — TEMA MINIMALISTA (tela)
+   Camada de apresentacao apenas: nenhum dado, limiar ou rotulo e removido.
+   A codificacao de nivel (cor + forma + glifo + rotulo) e preservada.
+   Escopo: tela e captura PNG/PDF. NAO se aplica a impressao A3 nem a
+   medicao de escala (.prmeasure), que seguem calibradas no tema anterior.
+   Para desligar: remover a classe "tmin" do <body>.
+   ========================================================================= */
+@media screen{
+.tmin:not(.prmeasure){--line:#ECEEF1; --line2:#F3F4F6; --blue1:#F7F8FA; --blue2:#F1F3F6; --blue3:#E4E7EC; --ink:#111827; --ink2:#374151; --mut:#6B7280; --mut2:#9CA3AF; font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif; color:var(--ink); background:#fff; -webkit-font-smoothing:antialiased; letter-spacing:-.003em}
+.tmin:not(.prmeasure) header{border-bottom:1px solid var(--line); padding:14px 28px 12px; display:flex; flex-wrap:wrap; align-items:center; gap:10px 12px}
+.tmin:not(.prmeasure) .hd-top{display:contents}
+.tmin:not(.prmeasure) .hd-top{gap:10px 12px}
+.tmin:not(.prmeasure) .mark svg{height:20px}
+.tmin:not(.prmeasure) .brand{font-size:17px; font-weight:700}
+.tmin:not(.prmeasure) .hd-div{background:var(--line); height:22px}
+.tmin:not(.prmeasure) .hd-title{font-size:13px; font-weight:600; color:var(--ink)}
+.tmin:not(.prmeasure) .hd-sub{font-size:11px; color:var(--mut2); margin-top:1px}
+.tmin:not(.prmeasure) .langs{gap:2px; padding:2px; border:1px solid var(--line); border-radius:7px}
+.tmin:not(.prmeasure) .langs button{border:0; background:transparent; color:var(--mut); padding:3px 8px; font-size:10.5px; font-weight:600; border-radius:5px}
+.tmin:not(.prmeasure) .langs button.on{background:var(--line2); color:var(--ink); border:0}
+.tmin:not(.prmeasure) .btn{background:#fff; color:var(--ink2); border:1px solid var(--line); border-radius:7px; padding:6px 11px; font-size:11.5px; font-weight:500}
+.tmin:not(.prmeasure) .btn:hover{background:#F9FAFB; border-color:#D5D9DF}
+.tmin:not(.prmeasure) .btn.pri{background:#fff; border-color:var(--line)}
+.tmin:not(.prmeasure) #btnRefresh{background:var(--ink); border-color:var(--ink); color:#fff}
+.tmin:not(.prmeasure) #btnRefresh:hover{background:#1F2937}
+.tmin:not(.prmeasure) .btn.sm{padding:4px 10px; font-size:11px}
+.tmin:not(.prmeasure) #btnAlerta.on{border-color:#B7D3AE; background:#F5FAF3}
+.tmin:not(.prmeasure) .clock{font-size:10.5px; color:var(--mut2); line-height:1.45; display:flex; gap:14px; align-items:center; text-align:left; white-space:nowrap}
+.tmin:not(.prmeasure) #quem{font-weight:500; color:var(--ink2); font-size:11px}
+.tmin:not(.prmeasure) #chip-leitura{font-weight:600; background:#FFFBF3; border-color:#EFD3A2}
+.tmin:not(.prmeasure) .flagbar{margin:0 0 0 auto; width:auto; gap:14px}
+.tmin:not(.prmeasure) .flagbar .fb-t{font-size:9px; font-weight:600; color:var(--mut2); letter-spacing:.08em}
+.tmin:not(.prmeasure) .fgi{gap:4px}
+.tmin:not(.prmeasure) .fgi .fg-w svg{height:13px; width:20px; border-radius:2px}
+.tmin:not(.prmeasure) .fgi .fg-l{font-size:8.5px; font-weight:700}
+.tmin:not(.prmeasure) .alerta{padding:10px 28px; border-bottom:1px solid var(--line); gap:6px}
+.tmin:not(.prmeasure) .al-bar{border-width:0 0 0 3px; border-radius:0 8px 8px 0; padding:9px 14px; gap:12px}
+.tmin:not(.prmeasure) .al-vermelho{background:#FEF7F6}
+.tmin:not(.prmeasure) .al-indef{background:#FAFAFA}
+.tmin:not(.prmeasure) .al-g{font-size:16px; line-height:1.3}
+.tmin:not(.prmeasure) .al-h{font-size:11px; font-weight:700; letter-spacing:.08em}
+.tmin:not(.prmeasure) .al-l{font-size:12px; color:var(--ink2); margin-top:3px}
+.tmin:not(.prmeasure) .al-l b{color:var(--ink)}
+.tmin:not(.prmeasure) .al-a{font-size:11.5px; border-left:2px solid var(--blue3); color:var(--ink2); margin-top:7px}
+.tmin:not(.prmeasure) .al-n{font-size:10.5px; color:var(--mut2)}
+.tmin:not(.prmeasure) nav{padding:0 28px; border-bottom:1px solid var(--line); gap:24px}
+.tmin:not(.prmeasure) nav button{padding:11px 0; font-size:12.5px; font-weight:500; color:var(--mut); border-bottom-width:2px}
+.tmin:not(.prmeasure) nav button:hover{color:var(--ink)}
+.tmin:not(.prmeasure) nav button.on{color:var(--ink); border-bottom-color:var(--ink); font-weight:600}
+.tmin:not(.prmeasure) nav .gl{opacity:.45; margin-right:6px}
+.tmin:not(.prmeasure) main{padding:28px 28px 56px}
+.tmin:not(.prmeasure) .notice{background:transparent; border:0; border-left:2px solid var(--amber); border-radius:0; padding:2px 0 2px 16px; margin-bottom:28px}
+.tmin:not(.prmeasure) .notice.rd{background:transparent; border-left-color:var(--red)}
+.tmin:not(.prmeasure) .notice.bl{background:transparent; border-left-color:#CBD2DC}
+.tmin:not(.prmeasure) .notice h4{font-size:10.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; margin-bottom:6px}
+.tmin:not(.prmeasure) .notice.bl h4{color:var(--ink)}
+.tmin:not(.prmeasure) .notice p,.tmin:not(.prmeasure) .notice ul{font-size:12px; color:#4B5563; line-height:1.6}
+.tmin:not(.prmeasure) .notice ul{margin:0 0 0 15px}
+.tmin:not(.prmeasure) .notice li{margin-bottom:2px}
+.tmin:not(.prmeasure) .notice li::marker{color:#C4C9D1}
+.tmin:not(.prmeasure) .notice b,.tmin:not(.prmeasure) .notice strong{color:var(--ink); font-weight:600}
+.tmin:not(.prmeasure) .kpis{gap:0; margin-bottom:34px; border-top:1px solid var(--line); border-bottom:1px solid var(--line)}
+.tmin:not(.prmeasure) .kpi{background:transparent; border:0; border-left:1px solid var(--line); border-radius:0; padding:16px 22px}
+.tmin:not(.prmeasure) .kpi:first-child{border-left:0; padding-left:0}
+.tmin:not(.prmeasure) .kpi.a,.tmin:not(.prmeasure) .kpi.r{background:transparent}
+.tmin:not(.prmeasure) .kpi .lb{font-size:10px; font-weight:600; color:var(--mut2); letter-spacing:.08em}
+.tmin:not(.prmeasure) .kpi .vl{font-size:26px; font-weight:600; letter-spacing:-.02em; margin-top:8px}
+.tmin:not(.prmeasure) .kpi .ft{font-size:11px; color:var(--mut2); margin-top:6px}
+.tmin:not(.prmeasure) .secttl{font-size:11px; font-weight:600; color:var(--ink); letter-spacing:.08em; border-bottom:0; padding-bottom:0; margin:34px 0 10px}
+.tmin:not(.prmeasure) .lgd{gap:8px 14px; margin-bottom:14px}
+.tmin:not(.prmeasure) .lgi{font-size:11px; color:var(--mut)}
+.tmin:not(.prmeasure) .uvnota{font-size:11px; color:var(--mut2); margin:0 0 22px}
+.tmin:not(.prmeasure) .uvnota b{font-weight:600}
+.tmin:not(.prmeasure) .chip{border-width:1px; font-size:9.5px; font-weight:700; letter-spacing:.06em; padding:2px 8px}
+.tmin:not(.prmeasure) .chip.out{border-color:var(--line); color:var(--mut); font-weight:600; background:#fff}
+.tmin:not(.prmeasure) .uvb,.tmin:not(.prmeasure) .crt{border-top:0; border-right:0; border-bottom:0; border-left-width:3px; background:transparent; font-weight:700; padding:1px 6px}
+.tmin:not(.prmeasure) .iso{border-color:var(--line); color:var(--mut); font-weight:700; border-radius:4px}
+.tmin:not(.prmeasure) .grid{gap:16px}
+.tmin:not(.prmeasure) .card{border:1px solid var(--line); border-radius:12px; background:#fff}
+.tmin:not(.prmeasure) .card.al{border:1px solid #F0DDB8; box-shadow:inset 0 3px 0 var(--amber)}
+.tmin:not(.prmeasure) .card.rl{border:1px solid #EFCAC5; box-shadow:inset 0 3px 0 var(--red)}
+.tmin:not(.prmeasure) .c-hd{background:transparent; border-bottom:0; padding:18px 18px 2px}
+.tmin:not(.prmeasure) .c-cd{font-size:14px; font-weight:700; letter-spacing:.02em; color:var(--ink)}
+.tmin:not(.prmeasure) .c-lo{font-size:11.5px; color:var(--mut); margin-top:5px}
+.tmin:not(.prmeasure) .c-end{font-size:10.5px; color:var(--mut2); margin-top:2px}
+.tmin:not(.prmeasure) .c-map{color:var(--mut)}
+.tmin:not(.prmeasure) .c-bd{padding:12px 18px 16px}
+.tmin:not(.prmeasure) .mets{gap:0; margin-top:14px; border-top:1px solid var(--line)}
+.tmin:not(.prmeasure) .met{background:transparent; border-radius:0; padding:10px 0; border-bottom:1px solid var(--line)}
+.tmin:not(.prmeasure) .met:nth-child(odd){padding-right:12px}
+.tmin:not(.prmeasure) .met:nth-child(even){padding-left:14px; border-left:1px solid var(--line)}
+.tmin:not(.prmeasure) .met .ml{font-size:9.5px; font-weight:500; color:var(--mut2); letter-spacing:.06em}
+.tmin:not(.prmeasure) .met .mv{font-size:17px; font-weight:600; color:var(--ink); letter-spacing:-.01em; margin-top:3px}
+.tmin:not(.prmeasure) .met .mu{font-size:10.5px; font-weight:500; color:var(--mut2)}
+.tmin:not(.prmeasure) .met .mf{font-weight:600}
+.tmin:not(.prmeasure) .act{background:transparent; border:0; border-left:2px solid var(--blue3); border-radius:0; padding:1px 0 1px 11px; margin-top:14px; font-size:11.5px; color:#4B5563; line-height:1.5}
+.tmin:not(.prmeasure) .act b{font-size:9.5px; font-weight:600; color:var(--mut2); letter-spacing:.06em; margin-bottom:2px}
+.tmin:not(.prmeasure) .coord{font-size:10.5px; color:var(--mut2); margin-top:12px}
+.tmin:not(.prmeasure) .coord em{font-weight:500}
+.tmin:not(.prmeasure) .src{border-top:1px solid var(--line); margin-top:14px; padding-top:10px}
+.tmin:not(.prmeasure) .src-h{font-size:9.5px; font-weight:600; color:var(--mut); letter-spacing:.07em}
+.tmin:not(.prmeasure) .src-h .tog{color:var(--mut2)}
+.tmin:not(.prmeasure) .src-i{font-size:11px}
+.tmin:not(.prmeasure) .src-i .lb{flex-basis:70px; font-size:8.5px; font-weight:600; color:var(--mut2)}
+.tmin:not(.prmeasure) .src-i a{color:var(--ink2); font-weight:500; border-bottom-color:var(--line)}
+.tmin:not(.prmeasure) .src-i a:hover{background:var(--blue1)}
+.tmin:not(.prmeasure) .src-i .dom{color:#C0C5CD}
+.tmin:not(.prmeasure) .src-cav{font-size:10px; font-weight:500; text-transform:none; letter-spacing:0; opacity:.9}
+.tmin:not(.prmeasure) table{font-size:12.5px}
+.tmin:not(.prmeasure) th{background:transparent; color:var(--mut2); font-weight:600; font-size:10px; letter-spacing:.07em; padding:10px 12px; border-bottom:1px solid var(--line)}
+.tmin:not(.prmeasure) td{padding:10px 12px; border-bottom:1px solid var(--line2); color:var(--ink2)}
+.tmin:not(.prmeasure) tbody tr:nth-child(even){background:transparent}
+.tmin:not(.prmeasure) tbody tr:hover{background:#FAFBFC}
+.tmin:not(.prmeasure) .tw{border:1px solid var(--line); border-radius:12px; margin-bottom:10px}
+.tmin:not(.prmeasure) .tw tbody tr:last-child td{border-bottom:0}
+.tmin:not(.prmeasure) .bar{gap:10px; margin-bottom:16px}
+.tmin:not(.prmeasure) .bar label{font-size:10px; font-weight:600; color:var(--mut2); letter-spacing:.07em}
+.tmin:not(.prmeasure) select,.tmin:not(.prmeasure) input{border:1px solid var(--line); border-radius:7px; padding:5px 9px; font-size:12px}
+.tmin:not(.prmeasure) select:focus,.tmin:not(.prmeasure) input:focus{outline:2px solid #DBE7FB; border-color:var(--brand)}
+.tmin:not(.prmeasure) .seg{border:1px solid var(--line); border-radius:7px; padding:2px; gap:2px}
+.tmin:not(.prmeasure) .seg button{border:0; border-radius:5px; color:var(--mut); font-weight:500; padding:4px 11px; background:transparent}
+.tmin:not(.prmeasure) .seg button:last-child{border:0}
+.tmin:not(.prmeasure) .seg button.on{background:var(--line2); color:var(--ink); font-weight:600}
+.tmin:not(.prmeasure) .st{font-size:11px; color:var(--mut)}
+.tmin:not(.prmeasure) .dot{width:7px; height:7px}
+.tmin:not(.prmeasure) .tarja{background:transparent; font-weight:700}
+.tmin:not(.prmeasure) .empty{background:transparent; border:1px dashed var(--blue3); border-radius:12px; color:var(--mut2)}
+.tmin:not(.prmeasure) .chart{border:1px solid var(--line); border-radius:12px; padding:16px 14px 10px; margin-bottom:18px}
+.tmin:not(.prmeasure) .chnote{font-size:11px; color:var(--mut2); font-style:normal}
+.tmin:not(.prmeasure) .two{gap:18px}
+.tmin:not(.prmeasure) .mask{background:rgba(17,24,39,.32)}
+.tmin:not(.prmeasure) .modal{border:1px solid var(--line); border-radius:14px; box-shadow:0 24px 60px rgba(17,24,39,.18)}
+.tmin:not(.prmeasure) .m-hd{background:#fff; color:var(--ink); border-bottom:1px solid var(--line); font-weight:600; font-size:14px; padding:16px 20px}
+.tmin:not(.prmeasure) .m-hd button{color:var(--mut)}
+.tmin:not(.prmeasure) .m-bd{padding:20px}
+.tmin:not(.prmeasure) .fld label{font-size:10px; font-weight:600; color:var(--mut2)}
+.tmin:not(.prmeasure) .fld input,.tmin:not(.prmeasure) .fld select,.tmin:not(.prmeasure) .fld textarea{border:1px solid var(--line); border-radius:7px}
+.tmin:not(.prmeasure) .m-ft{border-top:1px solid var(--line); padding:14px 20px}
+.tmin:not(.prmeasure) #mSave{background:var(--ink); border-color:var(--ink); color:#fff}
+.tmin:not(.prmeasure) footer{border-top:1px solid var(--line); color:var(--mut2); padding:16px 28px; font-size:10.5px}
+.tmin:not(.prmeasure) #gate{background:#F8F9FB; background-image:none}
+.tmin:not(.prmeasure) #gate-box{border:1px solid var(--line); border-radius:14px; padding:30px 28px 24px; box-shadow:0 18px 50px rgba(17,24,39,.08)}
+.tmin:not(.prmeasure) .gt-t{font-size:17px; font-weight:700; color:var(--ink)}
+.tmin:not(.prmeasure) .gt-s{color:var(--mut)}
+.tmin:not(.prmeasure) .gt-f label{font-size:10.5px; font-weight:600; color:var(--mut)}
+.tmin:not(.prmeasure) .gt-f input{border:1px solid var(--line); border-radius:8px}
+.tmin:not(.prmeasure) .gt-langs button{border:1px solid var(--line); color:var(--mut); border-radius:5px}
+.tmin:not(.prmeasure) .gt-langs button.on{background:var(--line2); border-color:var(--line); color:var(--ink)}
+.tmin:not(.prmeasure) #btn-entrar{background:var(--ink); border-color:var(--ink); color:#fff; border-radius:8px}
+.tmin:not(.prmeasure) .gt-err{border:0; border-left:3px solid var(--red); border-radius:0 8px 8px 0}
+.tmin:not(.prmeasure) .gt-nota{color:var(--mut2); border-top-color:var(--line)}
+.tmin:not(.prmeasure) .grid{grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); align-items:start}
+.tmin:not(.prmeasure) .card{transition:border-color .15s ease, box-shadow .15s ease}
+.tmin:not(.prmeasure) .card.nv-verde{box-shadow:inset 0 3px 0 var(--green)}
+.tmin:not(.prmeasure) .card.nv-ambar{box-shadow:inset 0 3px 0 var(--amber)}
+.tmin:not(.prmeasure) .card.nv-vermelho{border-color:#EFCAC5; box-shadow:inset 0 3px 0 var(--red)}
+.tmin:not(.prmeasure) .card.nv-critico{border-color:#9AA3B5; box-shadow:inset 0 4px 0 var(--navy-d)}
+.tmin:not(.prmeasure) .card.nv-indef{box-shadow:none; border-top:2px dashed var(--grey-l)}
+.tmin:not(.prmeasure) .c-hd{cursor:pointer; user-select:none}
+.tmin:not(.prmeasure) .c-hd:focus-visible{outline:2px solid var(--brand); outline-offset:-2px; border-radius:12px}
+.tmin:not(.prmeasure) .card:hover{border-color:#D5D9DF}
+.tmin:not(.prmeasure) .c-tog{display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; margin-left:4px; color:var(--mut2); font-size:11px; transition:transform .15s ease; flex:0 0 auto}
+.tmin:not(.prmeasure) .card.aberto .c-tog{transform:rotate(180deg)}
+.tmin:not(.prmeasure) .c-right{display:flex; align-items:center; gap:2px; flex:0 0 auto}
+.tmin:not(.prmeasure) .card:not(.aberto) .c-hd{padding:16px 14px 14px 16px}
+.tmin:not(.prmeasure) .card:not(.aberto) .c-lo,.tmin:not(.prmeasure) .card:not(.aberto) .c-end,.tmin:not(.prmeasure) .card:not(.aberto) .c-bd{display:none}
+.tmin:not(.prmeasure) .cardbar{display:flex; align-items:center; justify-content:space-between; gap:12px; margin:0 0 12px}
+.tmin:not(.prmeasure) .cardbar .hint{font-size:11px; color:var(--mut2); margin:0}
+.tmin:not(.prmeasure) .card:not(.aberto) .c-id .iso{display:none}
+.tmin:not(.prmeasure) .card .c-hd > div{min-width:0}
+.tmin:not(.prmeasure) .c-cd{white-space:nowrap}
+.tmin:not(.prmeasure) .card:not(.aberto) .c-id{gap:8px}
+.tmin:not(.prmeasure) .card:not(.aberto) .c-hd{padding:15px 10px 13px 14px}
+.tmin:not(.prmeasure) .card:not(.aberto) .c-cd{font-size:13px}
+.tmin:not(.prmeasure) .card:not(.aberto) .c-id{gap:7px}
+.tmin:not(.prmeasure) .card:not(.aberto) .c-tog{margin-left:2px; width:14px}
+.tmin:not(.prmeasure) .card:not(.aberto) .c-hd > div{align-items:center !important}
+.tmin:not(.prmeasure) .src-i{flex-wrap:wrap}
+.tmin:not(.prmeasure) .src-i .dom{white-space:nowrap}
+.tmin:not(.prmeasure) .card.aberto{order:-1}
+.tmin:not(.prmeasure) .card:not(.aberto){order:1}
+.tmin:not(.prmeasure) .c-sep{grid-column:1 / -1; order:0; height:0}
+.tmin:not(.prmeasure) .grid:has(> .card.aberto):has(> .card:not(.aberto)) > .c-sep{display:block}
+}
+@media print{
+.tmin.captura{--line:#ECEEF1; --line2:#F3F4F6; --blue1:#F7F8FA; --blue2:#F1F3F6; --blue3:#E4E7EC; --ink:#111827; --ink2:#374151; --mut:#6B7280; --mut2:#9CA3AF; font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif; color:var(--ink); background:#fff; -webkit-font-smoothing:antialiased; letter-spacing:-.003em}
+.tmin.captura header{border-bottom:1px solid var(--line); padding:14px 28px 12px; display:flex; flex-wrap:wrap; align-items:center; gap:10px 12px}
+.tmin.captura .hd-top{display:contents}
+.tmin.captura .hd-top{gap:10px 12px}
+.tmin.captura .mark svg{height:20px}
+.tmin.captura .brand{font-size:17px; font-weight:700}
+.tmin.captura .hd-div{background:var(--line); height:22px}
+.tmin.captura .hd-title{font-size:13px; font-weight:600; color:var(--ink)}
+.tmin.captura .hd-sub{font-size:11px; color:var(--mut2); margin-top:1px}
+.tmin.captura .langs{gap:2px; padding:2px; border:1px solid var(--line); border-radius:7px}
+.tmin.captura .langs button{border:0; background:transparent; color:var(--mut); padding:3px 8px; font-size:10.5px; font-weight:600; border-radius:5px}
+.tmin.captura .langs button.on{background:var(--line2); color:var(--ink); border:0}
+.tmin.captura .btn{background:#fff; color:var(--ink2); border:1px solid var(--line); border-radius:7px; padding:6px 11px; font-size:11.5px; font-weight:500}
+.tmin.captura .btn:hover{background:#F9FAFB; border-color:#D5D9DF}
+.tmin.captura .btn.pri{background:#fff; border-color:var(--line)}
+.tmin.captura #btnRefresh{background:var(--ink); border-color:var(--ink); color:#fff}
+.tmin.captura #btnRefresh:hover{background:#1F2937}
+.tmin.captura .btn.sm{padding:4px 10px; font-size:11px}
+.tmin.captura #btnAlerta.on{border-color:#B7D3AE; background:#F5FAF3}
+.tmin.captura .clock{font-size:10.5px; color:var(--mut2); line-height:1.45; display:flex; gap:14px; align-items:center; text-align:left; white-space:nowrap}
+.tmin.captura #quem{font-weight:500; color:var(--ink2); font-size:11px}
+.tmin.captura #chip-leitura{font-weight:600; background:#FFFBF3; border-color:#EFD3A2}
+.tmin.captura .flagbar{margin:0 0 0 auto; width:auto; gap:14px}
+.tmin.captura .flagbar .fb-t{font-size:9px; font-weight:600; color:var(--mut2); letter-spacing:.08em}
+.tmin.captura .fgi{gap:4px}
+.tmin.captura .fgi .fg-w svg{height:13px; width:20px; border-radius:2px}
+.tmin.captura .fgi .fg-l{font-size:8.5px; font-weight:700}
+.tmin.captura .alerta{padding:10px 28px; border-bottom:1px solid var(--line); gap:6px}
+.tmin.captura .al-bar{border-width:0 0 0 3px; border-radius:0 8px 8px 0; padding:9px 14px; gap:12px}
+.tmin.captura .al-vermelho{background:#FEF7F6}
+.tmin.captura .al-indef{background:#FAFAFA}
+.tmin.captura .al-g{font-size:16px; line-height:1.3}
+.tmin.captura .al-h{font-size:11px; font-weight:700; letter-spacing:.08em}
+.tmin.captura .al-l{font-size:12px; color:var(--ink2); margin-top:3px}
+.tmin.captura .al-l b{color:var(--ink)}
+.tmin.captura .al-a{font-size:11.5px; border-left:2px solid var(--blue3); color:var(--ink2); margin-top:7px}
+.tmin.captura .al-n{font-size:10.5px; color:var(--mut2)}
+.tmin.captura nav{padding:0 28px; border-bottom:1px solid var(--line); gap:24px}
+.tmin.captura nav button{padding:11px 0; font-size:12.5px; font-weight:500; color:var(--mut); border-bottom-width:2px}
+.tmin.captura nav button:hover{color:var(--ink)}
+.tmin.captura nav button.on{color:var(--ink); border-bottom-color:var(--ink); font-weight:600}
+.tmin.captura nav .gl{opacity:.45; margin-right:6px}
+.tmin.captura main{padding:28px 28px 56px}
+.tmin.captura .notice{background:transparent; border:0; border-left:2px solid var(--amber); border-radius:0; padding:2px 0 2px 16px; margin-bottom:28px}
+.tmin.captura .notice.rd{background:transparent; border-left-color:var(--red)}
+.tmin.captura .notice.bl{background:transparent; border-left-color:#CBD2DC}
+.tmin.captura .notice h4{font-size:10.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; margin-bottom:6px}
+.tmin.captura .notice.bl h4{color:var(--ink)}
+.tmin.captura .notice p,.tmin.captura .notice ul{font-size:12px; color:#4B5563; line-height:1.6}
+.tmin.captura .notice ul{margin:0 0 0 15px}
+.tmin.captura .notice li{margin-bottom:2px}
+.tmin.captura .notice li::marker{color:#C4C9D1}
+.tmin.captura .notice b,.tmin.captura .notice strong{color:var(--ink); font-weight:600}
+.tmin.captura .kpis{gap:0; margin-bottom:34px; border-top:1px solid var(--line); border-bottom:1px solid var(--line)}
+.tmin.captura .kpi{background:transparent; border:0; border-left:1px solid var(--line); border-radius:0; padding:16px 22px}
+.tmin.captura .kpi:first-child{border-left:0; padding-left:0}
+.tmin.captura .kpi.a,.tmin.captura .kpi.r{background:transparent}
+.tmin.captura .kpi .lb{font-size:10px; font-weight:600; color:var(--mut2); letter-spacing:.08em}
+.tmin.captura .kpi .vl{font-size:26px; font-weight:600; letter-spacing:-.02em; margin-top:8px}
+.tmin.captura .kpi .ft{font-size:11px; color:var(--mut2); margin-top:6px}
+.tmin.captura .secttl{font-size:11px; font-weight:600; color:var(--ink); letter-spacing:.08em; border-bottom:0; padding-bottom:0; margin:34px 0 10px}
+.tmin.captura .lgd{gap:8px 14px; margin-bottom:14px}
+.tmin.captura .lgi{font-size:11px; color:var(--mut)}
+.tmin.captura .uvnota{font-size:11px; color:var(--mut2); margin:0 0 22px}
+.tmin.captura .uvnota b{font-weight:600}
+.tmin.captura .chip{border-width:1px; font-size:9.5px; font-weight:700; letter-spacing:.06em; padding:2px 8px}
+.tmin.captura .chip.out{border-color:var(--line); color:var(--mut); font-weight:600; background:#fff}
+.tmin.captura .uvb,.tmin.captura .crt{border-top:0; border-right:0; border-bottom:0; border-left-width:3px; background:transparent; font-weight:700; padding:1px 6px}
+.tmin.captura .iso{border-color:var(--line); color:var(--mut); font-weight:700; border-radius:4px}
+.tmin.captura .grid{gap:16px}
+.tmin.captura .card{border:1px solid var(--line); border-radius:12px; background:#fff}
+.tmin.captura .card.al{border:1px solid #F0DDB8; box-shadow:inset 0 3px 0 var(--amber)}
+.tmin.captura .card.rl{border:1px solid #EFCAC5; box-shadow:inset 0 3px 0 var(--red)}
+.tmin.captura .c-hd{background:transparent; border-bottom:0; padding:18px 18px 2px}
+.tmin.captura .c-cd{font-size:14px; font-weight:700; letter-spacing:.02em; color:var(--ink)}
+.tmin.captura .c-lo{font-size:11.5px; color:var(--mut); margin-top:5px}
+.tmin.captura .c-end{font-size:10.5px; color:var(--mut2); margin-top:2px}
+.tmin.captura .c-map{color:var(--mut)}
+.tmin.captura .c-bd{padding:12px 18px 16px}
+.tmin.captura .mets{gap:0; margin-top:14px; border-top:1px solid var(--line)}
+.tmin.captura .met{background:transparent; border-radius:0; padding:10px 0; border-bottom:1px solid var(--line)}
+.tmin.captura .met:nth-child(odd){padding-right:12px}
+.tmin.captura .met:nth-child(even){padding-left:14px; border-left:1px solid var(--line)}
+.tmin.captura .met .ml{font-size:9.5px; font-weight:500; color:var(--mut2); letter-spacing:.06em}
+.tmin.captura .met .mv{font-size:17px; font-weight:600; color:var(--ink); letter-spacing:-.01em; margin-top:3px}
+.tmin.captura .met .mu{font-size:10.5px; font-weight:500; color:var(--mut2)}
+.tmin.captura .met .mf{font-weight:600}
+.tmin.captura .act{background:transparent; border:0; border-left:2px solid var(--blue3); border-radius:0; padding:1px 0 1px 11px; margin-top:14px; font-size:11.5px; color:#4B5563; line-height:1.5}
+.tmin.captura .act b{font-size:9.5px; font-weight:600; color:var(--mut2); letter-spacing:.06em; margin-bottom:2px}
+.tmin.captura .coord{font-size:10.5px; color:var(--mut2); margin-top:12px}
+.tmin.captura .coord em{font-weight:500}
+.tmin.captura .src{border-top:1px solid var(--line); margin-top:14px; padding-top:10px}
+.tmin.captura .src-h{font-size:9.5px; font-weight:600; color:var(--mut); letter-spacing:.07em}
+.tmin.captura .src-h .tog{color:var(--mut2)}
+.tmin.captura .src-i{font-size:11px}
+.tmin.captura .src-i .lb{flex-basis:70px; font-size:8.5px; font-weight:600; color:var(--mut2)}
+.tmin.captura .src-i a{color:var(--ink2); font-weight:500; border-bottom-color:var(--line)}
+.tmin.captura .src-i a:hover{background:var(--blue1)}
+.tmin.captura .src-i .dom{color:#C0C5CD}
+.tmin.captura .src-cav{font-size:10px; font-weight:500; text-transform:none; letter-spacing:0; opacity:.9}
+.tmin.captura table{font-size:12.5px}
+.tmin.captura th{background:transparent; color:var(--mut2); font-weight:600; font-size:10px; letter-spacing:.07em; padding:10px 12px; border-bottom:1px solid var(--line)}
+.tmin.captura td{padding:10px 12px; border-bottom:1px solid var(--line2); color:var(--ink2)}
+.tmin.captura tbody tr:nth-child(even){background:transparent}
+.tmin.captura tbody tr:hover{background:#FAFBFC}
+.tmin.captura .tw{border:1px solid var(--line); border-radius:12px; margin-bottom:10px}
+.tmin.captura .tw tbody tr:last-child td{border-bottom:0}
+.tmin.captura .bar{gap:10px; margin-bottom:16px}
+.tmin.captura .bar label{font-size:10px; font-weight:600; color:var(--mut2); letter-spacing:.07em}
+.tmin.captura select,.tmin.captura input{border:1px solid var(--line); border-radius:7px; padding:5px 9px; font-size:12px}
+.tmin.captura select:focus,.tmin.captura input:focus{outline:2px solid #DBE7FB; border-color:var(--brand)}
+.tmin.captura .seg{border:1px solid var(--line); border-radius:7px; padding:2px; gap:2px}
+.tmin.captura .seg button{border:0; border-radius:5px; color:var(--mut); font-weight:500; padding:4px 11px; background:transparent}
+.tmin.captura .seg button:last-child{border:0}
+.tmin.captura .seg button.on{background:var(--line2); color:var(--ink); font-weight:600}
+.tmin.captura .st{font-size:11px; color:var(--mut)}
+.tmin.captura .dot{width:7px; height:7px}
+.tmin.captura .tarja{background:transparent; font-weight:700}
+.tmin.captura .empty{background:transparent; border:1px dashed var(--blue3); border-radius:12px; color:var(--mut2)}
+.tmin.captura .chart{border:1px solid var(--line); border-radius:12px; padding:16px 14px 10px; margin-bottom:18px}
+.tmin.captura .chnote{font-size:11px; color:var(--mut2); font-style:normal}
+.tmin.captura .two{gap:18px}
+.tmin.captura .mask{background:rgba(17,24,39,.32)}
+.tmin.captura .modal{border:1px solid var(--line); border-radius:14px; box-shadow:0 24px 60px rgba(17,24,39,.18)}
+.tmin.captura .m-hd{background:#fff; color:var(--ink); border-bottom:1px solid var(--line); font-weight:600; font-size:14px; padding:16px 20px}
+.tmin.captura .m-hd button{color:var(--mut)}
+.tmin.captura .m-bd{padding:20px}
+.tmin.captura .fld label{font-size:10px; font-weight:600; color:var(--mut2)}
+.tmin.captura .fld input,.tmin.captura .fld select,.tmin.captura .fld textarea{border:1px solid var(--line); border-radius:7px}
+.tmin.captura .m-ft{border-top:1px solid var(--line); padding:14px 20px}
+.tmin.captura #mSave{background:var(--ink); border-color:var(--ink); color:#fff}
+.tmin.captura footer{border-top:1px solid var(--line); color:var(--mut2); padding:16px 28px; font-size:10.5px}
+.tmin.captura #gate{background:#F8F9FB; background-image:none}
+.tmin.captura #gate-box{border:1px solid var(--line); border-radius:14px; padding:30px 28px 24px; box-shadow:0 18px 50px rgba(17,24,39,.08)}
+.tmin.captura .gt-t{font-size:17px; font-weight:700; color:var(--ink)}
+.tmin.captura .gt-s{color:var(--mut)}
+.tmin.captura .gt-f label{font-size:10.5px; font-weight:600; color:var(--mut)}
+.tmin.captura .gt-f input{border:1px solid var(--line); border-radius:8px}
+.tmin.captura .gt-langs button{border:1px solid var(--line); color:var(--mut); border-radius:5px}
+.tmin.captura .gt-langs button.on{background:var(--line2); border-color:var(--line); color:var(--ink)}
+.tmin.captura #btn-entrar{background:var(--ink); border-color:var(--ink); color:#fff; border-radius:8px}
+.tmin.captura .gt-err{border:0; border-left:3px solid var(--red); border-radius:0 8px 8px 0}
+.tmin.captura .gt-nota{color:var(--mut2); border-top-color:var(--line)}
+.tmin.captura .grid{grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); align-items:start}
+.tmin.captura .card{transition:border-color .15s ease, box-shadow .15s ease}
+.tmin.captura .card.nv-verde{box-shadow:inset 0 3px 0 var(--green)}
+.tmin.captura .card.nv-ambar{box-shadow:inset 0 3px 0 var(--amber)}
+.tmin.captura .card.nv-vermelho{border-color:#EFCAC5; box-shadow:inset 0 3px 0 var(--red)}
+.tmin.captura .card.nv-critico{border-color:#9AA3B5; box-shadow:inset 0 4px 0 var(--navy-d)}
+.tmin.captura .card.nv-indef{box-shadow:none; border-top:2px dashed var(--grey-l)}
+.tmin.captura .c-hd{cursor:pointer; user-select:none}
+.tmin.captura .c-hd:focus-visible{outline:2px solid var(--brand); outline-offset:-2px; border-radius:12px}
+.tmin.captura .card:hover{border-color:#D5D9DF}
+.tmin.captura .c-tog{display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; margin-left:4px; color:var(--mut2); font-size:11px; transition:transform .15s ease; flex:0 0 auto}
+.tmin.captura .card.aberto .c-tog{transform:rotate(180deg)}
+.tmin.captura .c-right{display:flex; align-items:center; gap:2px; flex:0 0 auto}
+.tmin.captura .card:not(.aberto) .c-hd{padding:16px 14px 14px 16px}
+.tmin.captura .card:not(.aberto) .c-lo,.tmin.captura .card:not(.aberto) .c-end,.tmin.captura .card:not(.aberto) .c-bd{display:none}
+.tmin.captura .cardbar{display:flex; align-items:center; justify-content:space-between; gap:12px; margin:0 0 12px}
+.tmin.captura .cardbar .hint{font-size:11px; color:var(--mut2); margin:0}
+.tmin.captura .card:not(.aberto) .c-id .iso{display:none}
+.tmin.captura .card .c-hd > div{min-width:0}
+.tmin.captura .c-cd{white-space:nowrap}
+.tmin.captura .card:not(.aberto) .c-id{gap:8px}
+.tmin.captura .card:not(.aberto) .c-hd{padding:15px 10px 13px 14px}
+.tmin.captura .card:not(.aberto) .c-cd{font-size:13px}
+.tmin.captura .card:not(.aberto) .c-id{gap:7px}
+.tmin.captura .card:not(.aberto) .c-tog{margin-left:2px; width:14px}
+.tmin.captura .card:not(.aberto) .c-hd > div{align-items:center !important}
+.tmin.captura .src-i{flex-wrap:wrap}
+.tmin.captura .src-i .dom{white-space:nowrap}
+.tmin.captura .card.aberto{order:-1}
+.tmin.captura .card:not(.aberto){order:1}
+.tmin.captura .c-sep{grid-column:1 / -1; order:0; height:0}
+.tmin.captura .grid:has(> .card.aberto):has(> .card:not(.aberto)) > .c-sep{display:block}
+}
+@media screen{
+  .tmin:not(.prmeasure) .card.aberto .c-hd{padding:16px 14px 2px 16px}
+  .tmin:not(.prmeasure) .card.aberto .c-bd{padding:12px 16px 16px}
+}
+.c-sep{display:none}
+@media (prefers-reduced-motion:reduce){ .c-tog,.card{transition:none !important} }
+/* rev.25 - impressao A3/dossie e medicao: cartoes sempre completos, sem controles */
+@media print{ .tmin:not(.captura) .cardbar,.tmin:not(.captura) .c-tog{display:none !important} }
+body.prmeasure .cardbar,body.prmeasure .c-tog{display:none !important}
+@media screen{ body:not(.tmin) .cardbar{display:none} }
 </style>
 </head>
 <!-- rev.23 — a classe nasce no HTML, e nao e posta pelo script: sem ela, uma
      falha de carregamento do JavaScript entregaria o cockpit aberto. -->
-<body class="gate-on">
+<body class="gate-on tmin">
 
 <!-- =================== PORTA DE ENTRADA =================== -->
 <div id="gate" role="dialog" aria-modal="true" aria-labelledby="gtTit">
@@ -877,6 +1250,8 @@ body.pode-editar .so-editor{display:revert !important}
     <div class="secttl" data-i="sUV"></div>
     <div class="lgd" id="lgdUV"></div>
     <div class="uvnota" id="uvNota"></div>
+    <!-- rev.25 — cartoes recolhidos por padrao; clique expande -->
+    <div class="cardbar noprint"><p class="hint" id="cardHint"></p><button class="btn sm" id="btnExpTodos" type="button"></button></div>
     <div class="grid" id="cards"></div>
     <div class="prfoot" data-pf="painel"></div>
   </section>
@@ -3166,6 +3541,48 @@ function renderLgd(){
   document.getElementById("uvNota").innerHTML = T().uvNota;
 }
 
+/* rev.25 — estado de expansao por site; sobrevive ao re-render do ciclo */
+const ABERTOS = new Set();
+const TXT_CARD = {
+  pt:{hint:"Clique em um data center para ver os detalhes.", abrir:"Expandir todos", fechar:"Recolher todos"},
+  es:{hint:"Haga clic en un data center para ver los detalles.", abrir:"Expandir todos", fechar:"Contraer todos"},
+  en:{hint:"Click a data center to see its details.", abrir:"Expand all", fechar:"Collapse all"}};
+function atualizarBarraCards(){
+  const tx = TXT_CARD[LANG] || TXT_CARD.pt;
+  const h = document.getElementById("cardHint"), b = document.getElementById("btnExpTodos");
+  if(h) h.textContent = tx.hint;
+  if(b) b.textContent = ABERTOS.size === SITES.length ? tx.fechar : tx.abrir;
+}
+function alternarCard(card){
+  const cod = card.dataset.cod;
+  if(ABERTOS.has(cod)) ABERTOS.delete(cod); else ABERTOS.add(cod);
+  card.classList.toggle("aberto", ABERTOS.has(cod));
+  const hd = card.querySelector(".c-hd");
+  if(hd) hd.setAttribute("aria-expanded", ABERTOS.has(cod) ? "true" : "false");
+  atualizarBarraCards();
+  /* o cartao muda de grupo; mantem-no a vista */
+  const suave = !(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+  const al = document.getElementById("alerta");
+  card.style.scrollMarginTop = ((al && !al.hidden ? al.offsetHeight : 0) + 12) + "px";
+  card.scrollIntoView({block:"nearest", behavior: suave ? "smooth" : "auto"});
+}
+document.addEventListener("click", e=>{
+  if(e.target.closest("#btnExpTodos")){
+    const abrir = ABERTOS.size !== SITES.length;
+    SITES.forEach(s=> abrir ? ABERTOS.add(s.cod) : ABERTOS.delete(s.cod));
+    renderCards(); return;
+  }
+  const hd = e.target.closest("#cards .c-hd");
+  if(!hd || e.target.closest("a")) return;
+  alternarCard(hd.closest(".card"));
+});
+document.addEventListener("keydown", e=>{
+  const hd = e.target.closest && e.target.closest("#cards .c-hd");
+  if(!hd || (e.key !== "Enter" && e.key !== " ")) return;
+  if(e.target.closest("a")) return;
+  e.preventDefault(); alternarCard(hd.closest(".card"));
+});
+
 function renderCards(){
   document.getElementById("cards").innerHTML = SITES.map(s=>{
     const d = DADOS[s.cod]||{}, v = d.atual;
@@ -3176,8 +3593,9 @@ function renderCards(){
     const nvT = pior(nv, sisF?sisF.nivel:"verde");
     const hora = v?.hora ? new Date(v.hora).toLocaleString(LOC[LANG],{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}) : "—";
     const brd = nvT==="ambar"?"al":(nvT==="vermelho"||nvT==="critico"?"rl":"");
-    return `<div class="card ${brd}">
-      <div class="c-hd"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+    const ab = ABERTOS.has(s.cod);
+    return `<div class="card ${brd} nv-${nvT}${ab?" aberto":""}" data-cod="${esc(s.cod)}">
+      <div class="c-hd" role="button" tabindex="0" aria-expanded="${ab}" title="${esc(s.cod)} · ${esc(s.loc)} · ${esc(s.pais)}"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
         <div>
           <div class="c-id cd-${nvT}"><span class="c-dot" role="img" aria-label="${esc(T().lvl[nvT])}"></span>${pais(s.iso)}<span class="c-cd">${esc(s.cod)}</span></div>
           <div class="c-lo">${esc(s.loc)} · ${esc(s.pais)}</div>
@@ -3186,7 +3604,7 @@ function renderCards(){
             title="${esc(T().mapaTit)} — ${esc(s.cod)}"
             aria-label="${esc(T().mapaTit)} — ${esc(s.cod)}">${ICONE_MAPA}</a></div>`:""}
         </div>
-        ${chip(nvT)}</div></div>
+        <span class="c-right">${chip(nvT)}<span class="c-tog" aria-hidden="true">&#9662;</span></span></div></div>
       <div class="c-bd">
         <div style="display:flex;gap:5px;flex-wrap:wrap">
           ${badgeCrit(s.crit)}
@@ -3205,7 +3623,8 @@ function renderCards(){
           ${LANG==="en"?"Reading":LANG==="es"?"Lectura":"Leitura"}: ${esc(hora)}</div>
         ${rodapeFontes(s)}
       </div></div>`;
-  }).join("");
+  }).join("") + '<div class="c-sep" aria-hidden="true"></div>';
+  atualizarBarraCards();
 }
 
 /* ---------------------------------------------- rev.08 FAIXA DE PAISES · rev.09 INDICADOR CIRCULAR
@@ -3985,6 +4404,7 @@ async function capturarPNG(){
 
     const cx = document.createElement("div");
     cx.style.cssText = "width:" + W + "px; background:#fff";
+    cx.className = "tmin";   /* rev.24 — tema minimalista tambem na captura PNG */
     const st = document.createElement("style");
     st.textContent = css;
     cx.appendChild(st);
