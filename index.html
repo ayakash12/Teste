@@ -4550,8 +4550,37 @@ document.getElementById("btnNovoReg").onclick = ()=>{
      duas versoes do mesmo fato. Continua editavel — quem lavra pode estar
      lavrando por outro. */
   if(USUARIO && USUARIO.email) document.getElementById("mResp").value = USUARIO.email;
+  preencherFonte(true);
   mask.classList.add("on");
 };
+
+/* rev.29 — FONTE OFICIAL PREENCHIDA AUTOMATICAMENTE
+   A fonte e deduzida do pais do site (tabela FONTES, a mesma da aba Fontes
+   oficiais) e da natureza do evento:
+     vento      -> meteorologia oficial
+     sismo      -> sismologia oficial
+     vulcanismo -> protecao civil
+     outro      -> protecao civil
+   O campo continua editavel. Se o operador digitar outra fonte, a troca de
+   site ou de natureza NAO sobrescreve o que ele escreveu — so o valor que o
+   proprio cockpit sugeriu e substituido. */
+const FONTE_POR_TIPO = {vento:"met", sismo:"sis", vulcanismo:"pc", outro:"pc"};
+function fonteSugerida(){
+  const cod  = document.getElementById("mSiteSel").value;
+  const tipo = document.getElementById("mTipo").value;
+  const site = SITES.find(x => x.cod === cod);
+  const f    = site && FONTES.find(x => x.pais === site.pais);
+  return f ? (f[FONTE_POR_TIPO[tipo] || "pc"] || "") : "";
+}
+function preencherFonte(forcar){
+  const inp = document.getElementById("mFonte");
+  const atual = inp.value.trim();
+  if(!forcar && atual && atual !== inp.dataset.auto) return;   // edicao manual preservada
+  const v = fonteSugerida();
+  inp.value = v; inp.dataset.auto = v;
+}
+document.getElementById("mSiteSel").addEventListener("change", ()=>preencherFonte(false));
+document.getElementById("mTipo").addEventListener("change",    ()=>preencherFonte(false));
 /* rev.28 — o botao do cabecalho reaproveita a abertura padrao do modal */
 document.getElementById("btnRegHd").onclick = ()=>document.getElementById("btnNovoReg").click();
 const fechar = ()=>mask.classList.remove("on");
@@ -4934,7 +4963,7 @@ document.addEventListener("click", e => {
     const bt = document.getElementById("btnNovoReg");
     if(bt) bt.click();                                  // reaproveita a abertura padrão
     const sel = document.getElementById("mSiteSel");
-    if(sel) sel.value = l.dataset.alreg;
+    if(sel){ sel.value = l.dataset.alreg; preencherFonte(false); }
     const nvs = document.getElementById("mNivel");
     if(nvs && [...nvs.options].some(o => o.value === l.dataset.alnv)) nvs.value = l.dataset.alnv;
   }
