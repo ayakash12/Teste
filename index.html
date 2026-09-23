@@ -1104,6 +1104,17 @@ body.pode-editar .so-editor{display:revert !important}
 @media print{ .tmin:not(.captura) .cardbar,.tmin:not(.captura) .c-tog{display:none !important} }
 body.prmeasure .cardbar,body.prmeasure .c-tog{display:none !important}
 @media screen{ body:not(.tmin) .cardbar{display:none} }
+/* rev.26 - legenda de nivel em grade: vento e sismo alinhados por coluna */
+.lgd.lgd-grid{display:grid; grid-template-columns:max-content repeat(5,max-content);
+  column-gap:16px; row-gap:9px; align-items:center; overflow-x:auto; padding-bottom:2px}
+.lgd-grid .lgt{font-size:10px; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+  color:var(--grey); padding-right:6px}
+.tmin .lgd-grid .lgt{font-weight:600; color:var(--mut2)}
+/* rev.27 — a secao Registro some por inteiro para o perfil de leitura,
+   inclusive do dossie impresso. Nao usa .so-editor porque o "revert" daquela
+   regra forcaria a secao visivel para editores mesmo fora da aba ativa.
+   Conveniencia de interface: o controle de acesso real segue sendo o RLS. */
+body:not(.pode-editar) .view[data-v="registro"]{display:none !important}
 </style>
 </head>
 <!-- rev.23 — a classe nasce no HTML, e nao e posta pelo script: sem ela, uma
@@ -1184,18 +1195,21 @@ body.prmeasure .cardbar,body.prmeasure .c-tog{display:none !important}
       <button data-lang="en">EN</button>
     </div>
     <button class="btn pri" id="btnRefresh" data-i="btnRefresh"></button>
+    <!-- rev.28 — registro manual a qualquer momento, de qualquer aba: somente edicao -->
+    <button class="btn so-editor" id="btnRegHd" type="button" data-i="btnNovoReg"></button>
     <!-- rev.15 — o cabecalho fica com os DOIS botoes de captura, que cobrem
          rigorosamente a mesma area: a pagina inteira, rolada, como esta na
          tela. Impressao por painel e dossie desceram para a barra interna de
          cada painel, onde ja conviviam os botoes de cor e mono. Nada se
          perdeu; apenas deixou de disputar o cabecalho. -->
-    <button class="btn pri" id="btnPNG" data-i="btnPNG"></button>
-    <button class="btn" id="btnPDF" data-i="btnPDF"></button>
+    <!-- rev.27 — captura, som do alerta e aba Registro: somente perfil de edicao -->
+    <button class="btn pri so-editor" id="btnPNG" data-i="btnPNG"></button>
+    <button class="btn so-editor" id="btnPDF" data-i="btnPDF"></button>
     <!-- rev.21 — ARMAR O SOM. O navegador só autoriza áudio e notificação
          do sistema após um clique do operador; não há como contornar, e
          tentar fazê-lo na carga apenas gera exceção silenciosa. A faixa
          visual e o título piscante NAO dependem deste botão. -->
-    <button class="btn" id="btnAlerta" data-i="btnAlerta"></button>
+    <button class="btn so-editor" id="btnAlerta" data-i="btnAlerta"></button>
     <!-- rev.23 — quem esta na estacao, em que modo, e a saida. O e-mail fica
          visivel porque e ele que o RLS avalia: se o operador nao enxerga com
          que conta esta gravando, nao tem como entender por que a gravacao
@@ -1230,7 +1244,7 @@ body.prmeasure .cardbar,body.prmeasure .c-tog{display:none !important}
   <button data-v="sismos"><span class="gl">◬</span><span data-i="tabSismos"></span></button>
   <button data-v="meteo"><span class="gl">≋</span><span data-i="tabMeteo"></span></button>
   <button data-v="limiares"><span class="gl">▤</span><span data-i="tabLimiares"></span></button>
-  <button data-v="registro"><span class="gl">✎</span><span data-i="tabRegistro"></span></button>
+  <button data-v="registro" class="so-editor"><span class="gl">✎</span><span data-i="tabRegistro"></span></button>
   <button data-v="fontes"><span class="gl">⚖</span><span data-i="tabFontes"></span></button>
 </nav>
 
@@ -2868,6 +2882,8 @@ async function coletarNucleo(){
      núcleo de coleta: avalia uma única vez, sobre estado já consolidado.
      Chamá-la de dentro de render() faria a troca de idioma disparar som. */
   avaliarAlertas();
+  /* rev.28 — registro automatico; nao segura o fim do ciclo de coleta */
+  autoRegistrar().catch(()=>{});
 }
 
 /* rev.10 — INVOLUCRO COM TRAVA DE CONCORRENCIA
@@ -3528,10 +3544,25 @@ function renderKpis(){
 }
 
 function renderLgd(){
-  document.getElementById("lgdVento").innerHTML =
-    [["verde","0–39 km/h"],["ambar","40–59 km/h"],["vermelho","60–79 km/h"],
-     ["critico","≥ 80 km/h"],["indef","—"]]
-    .map(([k,f])=>`<span class="lgi">${chip(k)} <span>${esc(f)}</span></span>`).join("");
+  /* rev.26 — legenda em duas linhas alinhadas: rajada (clausula 8.1) e
+     sismo (clausula 8.2). As faixas saem de LIM_VENTO e LIM_SISMO, de modo
+     que a legenda nunca diverge do limiar que efetivamente classifica. */
+  const ROT_LGD = {
+    pt:["Rajada de vento","Sismo · magnitude no raio do site"],
+    es:["Ráfaga de viento","Sismo · magnitud en el radio del sitio"],
+    en:["Wind gust","Earthquake · magnitude within site radius"]}[LANG] || [];
+  const fx = (lim, fmt, un) => lim.map((l,i)=>[l.nv,
+      i===0 ? "< " + fmt(lim[1].min) + un
+    : l.max===Infinity ? "≥ " + fmt(l.min) + un
+    : fmt(l.min) + "–" + fmt(l.max) + un]);
+  const fVento = fx(LIM_VENTO, v=>num(v,0), " km/h");
+  fVento[0][1] = num(LIM_VENTO[0].min,0) + "–" + num(LIM_VENTO[0].max,0) + " km/h";
+  const fSismo = fx(LIM_SISMO, v=>num(v,1), "").map(([k,f])=>[k, f.replace(/^(< |≥ )?/, m=>(m||"") + "M ")]);
+  const linha = (rot, fx) => `<span class="lgt">${esc(rot)}</span>` +
+    fx.concat([["indef","—"]]).map(([k,f])=>`<span class="lgi">${chip(k)} <span>${esc(f)}</span></span>`).join("");
+  const lv = document.getElementById("lgdVento");
+  lv.classList.add("lgd-grid");
+  lv.innerHTML = linha(ROT_LGD[0]||"", fVento) + linha(ROT_LGD[1]||"", fSismo);
 
   document.getElementById("lgdUV").innerHTML =
     [["uv1","0–2"],["uv2","3–5"],["uv3","6–7"],["uv4","8–10"],
@@ -3820,7 +3851,7 @@ function renderRegs(){
     REGS.map(r=>`<tr><td class="nm">${new Date(r.ts).toLocaleString(LOC[LANG])}${
       r.sync===false ? ` <b title="${esc(T().sbFilaTit)}" style="color:var(--amber)">⟳</b>` : ""}</td>
       <td><b>${esc(r.site)}</b></td><td>${esc(T().tipos[r.tipo]||r.tipo)}</td><td>${chip(r.nivel)}</td>
-      <td class="nm">${esc(r.valor)}</td><td>${esc(r.fonte)}</td><td>${esc(r.resp)}</td>
+      <td class="nm">${esc(r.valor)}</td><td>${esc(r.fonte)}</td><td>${ehAuto(r) ? `<span class="chip out" title="${esc(autoTx().ok)}">AUTO</span> ` + esc(r.resp.replace(/^AUTO ·\s*/,"")) : esc(r.resp)}</td>
       <td>${esc(r.obs)}</td></tr>`).join("") + "</tbody>";
 }
 
@@ -4521,6 +4552,8 @@ document.getElementById("btnNovoReg").onclick = ()=>{
   if(USUARIO && USUARIO.email) document.getElementById("mResp").value = USUARIO.email;
   mask.classList.add("on");
 };
+/* rev.28 — o botao do cabecalho reaproveita a abertura padrao do modal */
+document.getElementById("btnRegHd").onclick = ()=>document.getElementById("btnNovoReg").click();
 const fechar = ()=>mask.classList.remove("on");
 document.getElementById("mClose").onclick = fechar;
 document.getElementById("mCancel").onclick = fechar;
@@ -4670,6 +4703,106 @@ function alTitulo(){
   AL_TTL = setInterval(() => { alt = !alt; document.title = alt ? AL_TTLBASE : marca; }, 1300);
 }
 
+
+/* =========================================================================
+   rev.28 — REGISTRO AUTOMATICO DE ALERTA VERMELHO E CRITICO
+   Todo sitio em vermelho ou critico, por rajada (clausula 8.1) ou por sismo
+   no raio (clausula 8.2), gera um registro sem intervencao do operador.
+   Nenhum limiar novo: usa nivelVento(), o nivel ja calculado de cada sismo e
+   o mesmo ponto de corte da faixa de alerta (AL_MIN).
+
+   Quem grava e a sessao de EDICAO aberta na estacao: salvarReg() e o RLS
+   continuam valendo, e uma estacao so de leitura nao grava nada.
+
+   DEDUPLICACAO — varias estacoes podem estar abertas e cada recarga da
+   pagina reavalia tudo. Por isso a decisao nao depende de "transicao vista
+   nesta estacao", e sim do que JA EXISTE na base (recarregada antes):
+     · sismo: um registro por evento USGS e por sitio (id gravado em obs);
+     · vento: nao grava se ja ha registro do mesmo sitio, tipo vento, nivel
+       igual ou superior, nas ultimas AUTO_JAN horas e posterior a ultima
+       vez que esta estacao viu o sitio sair do alerta. Escalada de
+       vermelho para critico gera registro novo.
+   Registros manuais contam para a deduplicacao: se o operador ja lavrou,
+   o automatico nao duplica.
+   ========================================================================= */
+const AUTO_JAN  = 12*3600*1000;
+const AUTO_SAIU = {};            // "cod|vento" -> ts em que esta estacao viu o fim do alerta
+const AUTO_EST  = {};            // "cod|vento" -> ultimo nivel observado
+const AUTO_FEITO = {};           // "cod|nivel" -> ts do registro automatico nesta estacao
+let AUTO_BUSY = false;
+const AUTO_TX = {
+  pt:{auto:"automático", obs:(nv)=>"Registro automático: alerta "+nv+" detectado pelo cockpit. Confirmar na fonte oficial do país (cláusula 5.3) e complementar com a ação executada.",
+      ok:"Registrado automaticamente", valS:"a"},
+  es:{auto:"automático", obs:(nv)=>"Registro automático: alerta "+nv+" detectada por el cockpit. Confirmar en la fuente oficial del país (cláusula 5.3) y complementar con la acción ejecutada.",
+      ok:"Registrado automáticamente", valS:"a"},
+  en:{auto:"automatic", obs:(nv)=>"Automatic record: "+nv+" alert detected by the cockpit. Confirm with the country's official source (clause 5.3) and add the action taken.",
+      ok:"Logged automatically", valS:"at"}};
+const autoTx = () => AUTO_TX[LANG] || AUTO_TX.pt;
+const ehAuto = r => typeof r.resp === "string" && r.resp.indexOf("AUTO") === 0;
+
+function autoCandidatos(){
+  const agora = Date.now(), lista = [];
+  SITES.forEach(s=>{
+    const d = DADOS[s.cod] || {}, v = d.atual;
+    /* vento */
+    const kV = s.cod + "|vento";
+    const nvV = v && v.rajada != null ? nivelVento(v.rajada) : "indef";
+    if(nvV !== "indef"){
+      if(ORD[nvV] >= AL_MIN){
+        lista.push({site:s.cod, tipo:"vento", nivel:nvV,
+          valor: num(v.rajada,0) + " km/h", fonte:"Open-Meteo", chave:null});
+      }else if(AUTO_EST[kV] && ORD[AUTO_EST[kV]] >= AL_MIN){
+        AUTO_SAIU[kV] = agora;
+      }
+      AUTO_EST[kV] = nvV;
+    }
+    /* sismo: cada evento no raio em vermelho/critico e um fato proprio */
+    (d.sismos||[]).forEach(e=>{
+      if(!e || !e.id || ORD[e.nivel] < AL_MIN) return;
+      lista.push({site:s.cod, tipo:"sismo", nivel:e.nivel,
+        valor: "M " + num(e.mag,1) + " " + autoTx().valS + " " + num(e.dist,0) + " km",
+        fonte:"USGS", chave:"USGS " + e.id});
+    });
+  });
+  return lista;
+}
+
+function autoJaRegistrado(c){
+  if(c.chave) return REGS.some(r => r.site === c.site && typeof r.obs === "string" && r.obs.indexOf(c.chave) >= 0);
+  const agora = Date.now(), saiu = AUTO_SAIU[c.site + "|vento"] || 0;
+  return REGS.some(r => r.site === c.site && r.tipo === "vento"
+    && ORD[r.nivel] >= ORD[c.nivel]
+    && (agora - new Date(r.ts).getTime()) < AUTO_JAN
+    && new Date(r.ts).getTime() > saiu);
+}
+
+async function autoRegistrar(){
+  if(AUTO_BUSY) return;
+  const cands = autoCandidatos();
+  if(!PODE_EDITAR || !cands.length) return;
+  AUTO_BUSY = true;
+  try{
+    /* base atualizada ANTES de decidir: outra estacao pode ter gravado */
+    try{ await carregarRegs(); }catch(e){}
+    let gravou = 0;
+    for(const c of cands){
+      if(autoJaRegistrado(c)) continue;
+      const tx = autoTx();
+      const reg = {ts:new Date().toISOString(), site:c.site, tipo:c.tipo, nivel:c.nivel,
+        valor:c.valor, fonte:c.fonte + " (" + tx.auto + ")",
+        resp:"AUTO · " + (USUARIO && USUARIO.email ? USUARIO.email : "cockpit"),
+        obs: tx.obs(T().lvl[c.nivel]) + (c.chave ? " " + c.chave + "." : "")};
+      try{
+        await salvarReg(reg);
+        REGS.unshift(reg);             // deduplica ainda neste mesmo laco
+        AUTO_FEITO[c.site + "|" + c.nivel] = Date.now();
+        gravou++;
+      }catch(e){ if(e && e.semPermissao) break; }
+    }
+    if(gravou){ try{ await carregarRegs(); }catch(e){} renderRegs(); renderAlerta(); }
+  }finally{ AUTO_BUSY = false; }
+}
+
 /* --- núcleo de decisão ------------------------------------------------- */
 function avaliarAlertas(){
   const agora = Date.now();
@@ -4762,6 +4895,8 @@ function renderAlerta(){
         + '<div class="al-n">' + (g.nv === "indef" ? T().alNotaD : T().alNota) + '</div>'
         + (rec.length ? '<div class="al-ok">✔ ' + esc(T().alRecOk) + ' — '
             + esc(rec.join(", ")) + '</div>' : "")
+        + (function(){ const f = g.cods.filter(c => AUTO_FEITO[c+"|"+g.nv]);
+            return f.length ? '<div class="al-ok">✔ ' + esc(autoTx().ok) + ' — ' + esc(f.join(", ")) + '</div>' : ""; })()
       + '</div>'
       + '<div class="al-btns">'
         + '<button class="btn sm" data-alrec="' + esc(g.nv) + '">' + esc(T().alRec) + '</button>'
@@ -4906,6 +5041,16 @@ function atualizarEstado(){
      script: repinta-las mantem a interface coerente com a sessao. */
   if(typeof renderAlerta === "function") renderAlerta();
   if(typeof renderRegs === "function" && typeof REGS !== "undefined") renderRegs();
+
+  /* rev.27 — quem so visualiza nao permanece na aba Registro: se a sessao
+     perdeu o perfil de edicao com a aba aberta, volta ao Painel. */
+  if(!PODE_EDITAR){
+    const ativa = document.querySelector('nav button.on');
+    if(ativa && ativa.dataset.v === "registro"){
+      const p = document.querySelector('nav button[data-v="painel"]');
+      if(p) p.click();
+    }
+  }
 }
 
 async function entrar(ev){
@@ -4929,6 +5074,7 @@ async function entrar(ev){
     /* Entrou: o que ficou retido nesta estacao enquanto ninguem estava
        autenticado sobe agora, e a aba passa a mostrar a base inteira. */
     try{ await carregarRegs(); renderRegs(); }catch(e){}
+    autoRegistrar().catch(()=>{});   /* rev.28 */
   }catch(e){
     gateErro(gateTraduzErro(e));
   }finally{
